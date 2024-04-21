@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="uk" data-bss-forced-theme="light"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Prices - Tilo</title>
+</head>
+
+<body>
+    <table class="table table-hover table-bordered border-primary">
+        <caption class="fs-2 fw-bold caption-top">Ціни на наші послуги</caption>
+        <thead>
+        <tr>
+            <th>№</th>
+            <th>Назва</th>
+            <th>Ціна</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="service, iterStat : ${services}">
+            <td th:text="${iterStat.index+1}">1</td>
+            <td th:text="${service.name}">Йога</td>
+            <td th:text="${service.price}">120 грн.</td>
+        </tr>
+        </tbody>
+    </table>
+
+</body>
+
+</html>
