@@ -1,1 +1,45 @@
-spring.application.name=TiloProject
+server:
+  servlet:
+    session:
+      timeout: 15m
+      cookie:
+        http-only: true
+        secure: false
+        same-site: strict
+  compression:
+    enabled: true
+    min-response-size: 4096
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/javascript
+
+#http://localhost:8080/h2-console
+spring:
+  application:
+    name: server
+  datasource:
+    driver-class-name: org.h2.Driver
+    #url: jdbc:h2:mem:testdb
+    username: sa
+    password: password
+    url: jdbc:h2:file:./data/demo
+  jpa:
+    #    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        trace: false
+        web-allow-others: true
+  thymeleaf:
+    encoding: UTF-8
+    cache: false
+    prefix: classpath:/templates/
+  #    enable-spring-el-compiler: true
+  web:
+    resources:
+      static-locations: classpath:/static/
+      chain:
+        cache: false
