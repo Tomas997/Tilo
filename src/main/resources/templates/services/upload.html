@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="uk"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Надіслати дані</title>
+</head>
+<body>
+
+<table>
+  <caption>Сервіси</caption>
+  <thead>
+  <tr>
+    <th>№</th>
+    <th>Назва</th>
+    <th>Короткий опис</th>
+    <th>Повний опис</th>
+    <th>Ціна</th>
+    <th>Мініатюра</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="service, iterStat : ${services}">
+    <td th:text="${iterStat.index+1}">1</td>
+    <td th:text="${service.name}">Йога</td>
+    <td th:utext="${service.shortDescription}">shortDescription</td>
+    <td th:utext="${service.description}">description</td>
+    <td th:text="${service.price}">description</td>
+    <td><img src="" th:src="@{'src/img/'+${service.imgName}}" alt="" style="max-width: 100px;"/></td>
+    <td>
+      <form th:action="@{'/services/'+${service.id}+'/delete'}" th:method="DELETE">
+        <button type="submit">Видалити</button>
+      </form>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<br>
+
+<form action="/services" method="post" enctype="multipart/form-data">
+  <label for="name">Ім'я:</label><br>
+  <input type="text" id="name" name="name"><br>
+  <label for="shortDescription">Короткий опис:</label><br>
+  <input type="text" id="shortDescription" name="shortDescription"><br>
+  <label for="description">Опис:</label><br>
+  <textarea id="description" name="description"></textarea><br>
+  <label for="price">Ціна:</label><br>
+  <input type="text" id="price" name="price"><br>
+  <label for="img">Зображення:</label><br>
+  <input type="file" id="img" name="img"><br><br>
+  <input type="submit" value="Надіслати">
+</form>
+</body>
+</html>
