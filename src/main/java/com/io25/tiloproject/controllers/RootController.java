@@ -1,10 +1,14 @@
 package com.io25.tiloproject.controllers;
 
+import com.io25.tiloproject.model.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.io25.tiloproject.services.YogaServiceService;
 
@@ -33,6 +37,12 @@ public class RootController {
         loadServices(model);
         return PRICES_VIEW_NAME;
     }
+    @PostMapping("home")
+    public String getHome(Authentication authentication){
+        System.out.println(((SimpleGrantedAuthority)authentication.getAuthorities().toArray()[0]).getAuthority());
+        return "redirect:"+ Role.valueOf(((SimpleGrantedAuthority)authentication.getAuthorities().toArray()[0]).getAuthority()).getHomePage();
+    }
+
 
     private void loadServices(Model model) {
         List<com.io25.tiloproject.model.YogaService> allServices = yogaServiceService.getAllServices();

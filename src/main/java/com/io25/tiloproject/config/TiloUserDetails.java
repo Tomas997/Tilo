@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 
 import java.util.Collection;
+import java.util.List;
 
 public class TiloUserDetails implements UserDetails {
 
@@ -18,8 +19,7 @@ public class TiloUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return tiloUser.getRoles().stream()
-                .map(r -> new SimpleGrantedAuthority(r.name())).toList();
+        return List.of(new SimpleGrantedAuthority(tiloUser.getRole().toString()));
     }
 
     @Override

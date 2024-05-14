@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фільтр таблиці</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Замовлення</h2>
+
+<label for="trainingdate">Дата заняття:</label>
+<input type="date" id="trainingdate" name="trainingdate" min="2024-04-30">
+
+
+<label for="filter">Виберіть назву:</label>
+<select id="filter">
+    <option value="0">Всі</option>
+    <option value="1">Hata</option>
+    <option value="2">Mata</option>
+    <option value="3">Bata</option>
+</select>
+
+<br>
+<br>
+
+
+<tbody>
+
+<tr th:each="coach, coachIndex : ${coaches}">
+    <img th:src="@{/trener1.png}" style="width:100px"/>
+    <h3 th:text="${coach.getFullName()}">ПІБ тренера</h3>
+    <td>
+        <table>
+            <tr>
+                <th>Рядок</th>
+                <th>Дата відвідування</th>
+                <th>Час відвідування</th>
+                <th>Назва</th>
+                <th>Запис</th>
+            </tr>
+            <tbody>
+            <tr th:each="record, recordIndex : ${coach.scheduleRecords}">
+                <td th:text="${recordIndex.index + 1}">1</td>
+                <td th:text="${record.date}">2024-05-04</td>
+                <td th:text="${record.time}">09:00</td>
+                <td th:text="${record.service}">Yoga1</td>
+                <td><input type="button" value="Запис"></td>
+            </tr>
+            </tbody>
+        </table>
+    </td>
+</tr>
+</tbody>
+
+
+<img src="trener1.png" style="width:100px"/>
+<h3>ПІБ тренера</h3>
+<table>
+    <thead>
+    <tr>
+        <th>Рядок</th>
+        <th>Час відвідування</th>
+        <th>Назва</th>
+        <th>Запис</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr type=1>
+        <td>1</td>
+        <td>09:00</td>
+        <td>Hata</td>
+        <td><input type="button" value="Запис"></td>
+    </tr>
+    <tr type=2>
+        <td>2</td>
+        <td>09:00</td>
+        <td>Mata</td>
+        <td><input type="button" value="Запис"></td>
+    </tr>
+    <tr type=3>
+        <td>3</td>
+        <td>09:00</td>
+        <td>Bata</td>
+        <td><input type="button" value="Запис"></td>
+    </tr>
+    <tr type=1>
+        <td>4</td>
+        <td>09:00</td>
+        <td>Hata</td>
+        <td><input type="button" value="Запис"></td>
+    </tr>
+    <tr type=2>
+        <td>5</td>
+        <td>09:00</td>
+        <td>Mata</td>
+        <td><input type="button" value="Запис"></td>
+    </tr>
+    <tr type=3>
+        <td>6</td>
+        <td>09:00</td>
+        <td>Bata</td>
+        <td><input type="button" value="Запис"></td>
+    </tr>
+    <tr type=2>
+        <td>7</td>
+        <td>09:00</td>
+        <td>Mata</td>
+        <td><input type="button" value="Запис"></td>
+    </tr>
+    <tr type=1>
+        <td>8</td>
+        <td>09:00</td>
+        <td>Hata</td>
+        <td><input type="button" value="Запис"></td>
+    </tr>
+    <tr type=3>
+        <td>9</td>
+        <td>09:00</td>
+        <td>Bata</td>
+        <td><input type="button" value="Запис"></td>
+    </tr>
+    </tbody>
+</table>
+<br>
+
+<script>
+    document.getElementById("filter").addEventListener("change", function () {
+        var value = parseInt(this.value);
+        var tables = document.getElementsByTagName("table");
+        for (var j = 0; j < tables.length; j++) {
+            var rows = tables[j].getElementsByTagName("tr");
+            for (var i = 1; i < rows.length; i++) {
+                rows[i].style.display = "";
+                if (value == 0) continue;
+                if (rows[i].getAttribute("type") != value) {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

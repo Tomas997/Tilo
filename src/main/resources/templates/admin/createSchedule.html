@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="uk"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фільтр таблиці</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Створити розклад</h2>
+
+День тижня
+
+<form action="/admin/createSchedule" method="get" id="loadForm">
+    <select id="day" name="day">
+        <option value="1" th:selected="${weekDay==1}">Понеділок</option>
+        <option value="2" th:selected="${weekDay==2}">Вівторок</option>
+        <option value="3" th:selected="${weekDay==3}">Середа</option>
+        <option value="4" th:selected="${weekDay==4}">Четвер</option>
+        <option value="5" th:selected="${weekDay==5}">П'ятниця</option>
+        <option value="6" th:selected="${weekDay==6}">Субота</option>
+        <option value="7" th:selected="${weekDay==7}">Неділя</option>
+    </select>
+
+    Тренер
+
+    <select id="coach" name="coach">
+        <option th:each="coachObj, iterStat : ${coaches}"
+                th:value="${iterStat.index + 1}"
+                th:text="${coachObj.fullName}"
+                th:selected="${coachObj.getId() == coachSelected}"></option>
+    </select>
+
+
+    <button id="loadButton" type="submit">Показати</button>
+</form>
+
+
+
+<table id="table1">
+    <thead>
+    <tr>
+        <th>Рядок</th>
+        <th>Час відвідування</th>
+        <th>Назва</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="scheduleWeekItem, iterStat : ${scheduleWeekRecord?.schedule}">
+        <td th:text="${iterStat.index + 1}"></td>
+        <td><input type="time" th:value="${scheduleWeekItem.time}" name="time"/></td>
+        <td>
+            <select name="service">
+                <option th:each="service, iterStat : ${services}"
+                        th:value="${iterStat.count}"
+                        th:text="${service.name}"
+                        th:selected="${scheduleWeekItem.service == service.id}"></option>
+            </select>
+        </td>
+        <td>
+            <form th:action="${'/admin/schedule/delete?id='+scheduleWeekItem.getId()+'&day='+weekDay+'&coach='+coachSelected}" th:method="delete">
+                <button type="submit" th:href="@{'/admin/schedule/delete?id='+scheduleWeekItem.id}">Видалити</button>
+            </form>
+        </td>
+    </tr>
+
+    </tbody>
+</table>
+
+<button id="addRow1">Додати</button>
+
+
+
+<form action="/admin/schedule/add" method="post" id="saveForm">
+    <button id="saveAll" type="submit">Зберегти</button>
+</form>
+<br>
+
+
+<form action="/admin/full_schedule/add" method="post" >
+    <button id="createSchedule" type="submit">Створити розклад</button>
+</form>
+
+<script th:inline="javascript">
+    var services =/*[[${services}]]*/ null;
+    var tables = document.querySelectorAll('table');
+    tables.forEach(function (table, index) {
+        var addButton = document.getElementById("addRow" + (index + 1));
+
+        addButton.addEventListener("click", function () {
+            // Створення нового рядка
+            var newRow = document.createElement("tr");
+
+            // Створення комірок для нового рядка
+            var cell1 = document.createElement("td");
+            cell1.textContent = "";
+
+            var cell2 = document.createElement("td");
+            var input = document.createElement("input");
+            input.type = "time";
+            input.value = "09:00";
+            input.name = "time"
+            cell2.appendChild(input);
+
+            var cell3 = document.createElement("td");
+            var select1 = document.createElement("select");
+            select1.name = "service"
+
+            services.forEach(function(obj) {
+                var option = document.createElement("option");
+                option.value = obj.id;
+                option.text = obj.name;
+                select1.appendChild(option);
+            });
+
+            cell3.appendChild(select1);
+
+            var cell4 = document.createElement("td");
+
+            // Додавання комірок до нового рядка
+            newRow.appendChild(cell1);
+            newRow.appendChild(cell2);
+            newRow.appendChild(cell3);
+            newRow.appendChild(cell4);
+
+            // Додавання нового рядка до таблиці
+            document.getElementById("table" + (index + 1)).getElementsByTagName("tbody")[0].appendChild(newRow);
+
+        });
+    });
+
+
+    document.getElementById('saveForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        jsonObject = {
+            day: document.getElementById('day').value,
+            coach: document.getElementById('coach').value,
+            items: []
+        }
+
+        let trs = document.getElementById("table1").getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+        let trsArray = Array.from(trs);
+
+        trsArray.forEach(function (element) {
+            let item = {};
+            item.time = element.querySelector("[name='time']").value;
+            item.service = element.querySelector("[name='service']").value;
+            jsonObject.items.push(item);
+        });
+
+        let jsonData = JSON.stringify(jsonObject);
+
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+                console.log(this.responseText);
+                document.location=this.responseText;
+            }
+        };
+
+        xhr.open('POST', document.getElementById("saveForm").getAttribute("action"));
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(jsonData);
+    });
+
+</script>
+
+</body>
+</html>

@@ -26,9 +26,8 @@ public class TiloUser {
 
     private String password;
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private List<Role> roles;
+    private Role role;
 
     @Override
     public boolean equals(Object o) {

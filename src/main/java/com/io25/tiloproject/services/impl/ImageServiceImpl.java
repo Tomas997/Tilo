@@ -15,6 +15,17 @@ public class ImageServiceImpl implements ImageService {
 
     private static final String SRC_IMG = "data/img/";
 
+    public ImageServiceImpl() {
+        Path path = Paths.get(SRC_IMG);
+        if (!Files.exists(path)) {
+            try {
+                Files.createDirectory(path);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     @Override
     public byte[] getImage(String imageName) throws IOException {
         Path imagePath = Paths.get(SRC_IMG, imageName);

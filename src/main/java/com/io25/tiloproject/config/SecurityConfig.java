@@ -71,7 +71,7 @@ public class SecurityConfig {
                         login ->
                                 login
                                         .permitAll()
-                                        //.successForwardUrl("/home/")
+                                        .successForwardUrl("/home")
                 )
                 .logout(logout -> logout.logoutSuccessUrl("/"))
                 .build();

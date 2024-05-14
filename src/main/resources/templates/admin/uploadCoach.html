@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="uk"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Надіслати дані</title>
+</head>
+<body>
+
+<table>
+  <caption>Тренери</caption>
+  <thead>
+  <tr>
+    <th>№</th>
+    <th>ПІБ</th>
+    <th>Номер телефону</th>
+    <th>Інформація</th>
+    <th>Зображення</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="coach, iterStat : ${coaches}">
+    <td th:text="${iterStat.index+1}">1</td>
+    <td th:text="${coach.getFullName()}">Олексій Флюзін</td>
+    <td th:utext="${coach.getPhoneNumber()}">+38097*******</td>
+    <td th:utext="${coach.getInfo()}">Майстер спорту</td>
+    <td><img src="" th:src="@{'src/img/'+${coach.imgName}}" alt="" style="max-width: 100px;" /></td>
+    <td>
+      <form th:action="@{'/coach/'+${coach.id}+'/delete'}" th:method="DELETE">
+        <button type="submit">Видалити</button>
+      </form>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<br>
+
+<form action="/admin" method="post" enctype="multipart/form-data">
+  <label for="fullName">ПІБ:</label><br>
+  <input type="text" id="fullName" name="fullName"><br>
+  <label for="phoneNumber">Номер телефону:</label><br>
+  <input type="text" id="phoneNumber" name="phoneNumber"><br>
+  <label for="info">Інформація:</label><br>
+  <textarea id="info" name="info"></textarea><br>
+  <label for="img">Зображення:</label><br>
+  <input type="file" id="img" name="img"><br><br>
+  <input type="submit" value="Надіслати">
+</form>
+</body>
+</html>
