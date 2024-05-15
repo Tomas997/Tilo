@@ -65,6 +65,33 @@
     .back-btn:hover {
         background-color: #CDA774;
     }
+
+    #popup a {
+    color: #333; /* Колір тексту */
+    font-size: 16px; /* Розмір шрифту */
+    text-decoration: none; /* Відсутність підкреслення */
+}
+
+#popup a:hover {
+    color: #D2B48C; /* Колір тексту при наведенні */
+    text-decoration: underline; /* Підкреслення при наведенні */
+}
+
+#popup table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#popup th, #popup td {
+    padding: 8px;
+    text-align: left;
+}
+
+#popup th {
+    padding-right: 10px;
+}
+
+
 </style>
 </head>
 <body>
@@ -88,7 +115,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr type=1><td>1</td> <td>09:00</td> <td>Йога 1</td> <td>4</td> <td><input type="button" value="Скасувати"></td></tr>
+        <tr type=1><td>1</td> <td>09:00</td> <td>Йога 1</td> <td>4</td> <td><input type="button" value="Скасувати" onclick="showPopup()"></td></tr>
         <tr type=2><td>2</td> <td>09:00</td> <td>Йога 2</td> <td>5</td> <td><input type="button" value="Скасувати"></td></tr>
         <tr type=3><td>3</td> <td>09:00</td> <td>Йога 3</td> <td>7</td> <td><input type="button" value="Скасувати"></td></tr>
     </tbody>
@@ -116,6 +143,36 @@
 <br>
 <br>
 
+<div id="popup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #fff; padding: 20px; border: 2px solid #D2B48C; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); z-index: 9999; max-height: 80%; width: 400px; overflow-y: auto;">
+    <!-- Заголовок pop-up вікна разом з посиланням для закриття -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>Список клієнтів</h2>
+        <a href="#" onclick="closePopup()">Закрити</a>
+    </div>
+    <!-- Таблиця для виведення ПІБ та телефону кожного клієнта -->
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <th style="text-align: left; padding-right: 10px;">ПІБ</th>
+            <th style="text-align: left;">Телефон</th>
+        </tr>
+        <tr>
+            <td>ПІБ1</td>
+            <td>тел.1</td>
+        </tr>
+        <tr>
+            <td>ПІБ2</td>
+            <td>тел.2</td>
+        </tr>
+        <tr>
+            <td>ПІБ3</td>
+            <td>тел.3</td>
+        </tr>
+
+    </table>
+</div>
+
+
+
 <script>
     document.getElementById("filter").addEventListener("change", function() {
         var value = parseInt(this.value);
@@ -131,6 +188,20 @@
 			}
 		}
     });
+</script>
+
+<script>
+    // Функція для закриття pop-up вікна
+    function closePopup() {
+        var popup = document.getElementById('popup');
+        popup.style.display = 'none';
+    }
+
+    // Функція для показу pop-up вікна
+    function showPopup() {
+        var popup = document.getElementById('popup');
+        popup.style.display = 'block';
+    }
 </script>
 
 
