@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Фільтр таблиці</title>
+<style>
+    table {
+        border-collapse: collapse;
+        margin-top: 10px;
+        width: 100%;
+        border: 2px solid #D2B48C; /* Додано границю кольору #D2B48C */
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-family: 'Lato', sans-serif;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    td {
+        font-family: 'Leelawadee UI', sans-serif;
+        font-size: 14px;
+    }
+
+    h2 {
+        font-family: 'Lato', sans-serif;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .back-btn {
+        background-color: #D2B48C;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px; /* Заокруглені краї кнопки */
+        float: right; /* Вирівнювання кнопки праворуч */
+    }
+
+    .back-btn:hover {
+        background-color: #CDA774;
+    }
+</style>
+</head>
+<body>
+<button class="back-btn" onclick="window.location.href='Coach_Main.html'">Назад</button>
+<h2>Історія</h2>
+
+<label for="startdate">Дата з:</label>
+<input type="date" id="startdate" name="startdate" min="2024-04-30">
+<label for="enddate"> по:</label>
+<input type="date" id="enddate" name="enddate" min="2024-04-30">
+<input type="button" value="Показати">
+<table>
+    <thead>
+        <tr>
+            <th>Рядок</th>
+			<th>Дата</th>
+			<th>Час</th>
+            <th>Назва</th>
+			<th>Кількість</th>
+			<th>Статус</th>
+        </tr>
+    </thead>
+    <tbody>
+		<tr><td>1</td> <td>28.04.2024</td> <td>10:00</td> <td>Mata</td> <td>5</td> <td>Проведено</td></tr>
+		<tr><td>2</td> <td>28.04.2024</td> <td>11:00</td> <td>Mata</td> <td>0</td> <td>Скасовано</td></tr>
+		<tr><td>3</td> <td>28.04.2024</td> <td>12:00</td> <td>Mata</td> <td>4</td> <td>Проведено</td></tr>
+    </tbody>
+</table>
+<br>
+Cторінка: <a href='#'>1</a>&nbsp<a href='#'>2</a>&nbsp<a href='#'>3</a>&nbsp...&nbsp<a href='#'>30</a>
+
+</body>
+</html>
