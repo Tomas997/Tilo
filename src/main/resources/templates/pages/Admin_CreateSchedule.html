@@ -75,22 +75,22 @@
 
 День тижня
 <select>
-	<option value="1">Понеділок</option>
-	<option value="2">Вівторок</option>
-	<option value="3">Середа</option>
-	<option value="4">Четвер</option>
-	<option value="5">П'ятниця</option>
-	<option value="6">Субота</option>
-	<option value="7">Неділя</option>
+    <option value="1">Понеділок</option>
+    <option value="2">Вівторок</option>
+    <option value="3">Середа</option>
+    <option value="4">Четвер</option>
+    <option value="5">П'ятниця</option>
+    <option value="6">Субота</option>
+    <option value="7">Неділя</option>
 </select>
 
 Тренер
 <select>
-	<option value="1">ПІБ 1</option>
-	<option value="2">ПІБ 2</option>
-	<option value="3">ПІБ 3</option>
-	<option value="4">ПІБ 4</option>
-	<option value="5">ПІБ 5</option>
+    <option value="1">ПІБ 1</option>
+    <option value="2">ПІБ 2</option>
+    <option value="3">ПІБ 3</option>
+    <option value="4">ПІБ 4</option>
+    <option value="5">ПІБ 5</option>
 </select>
 
 <table id="table1">
@@ -114,7 +114,7 @@
                     <option value="4">Назва 4</option>
                 </select>
             </td>
-            <td><input type="button" value="Видалити"></td>
+            <td><input type="button" value="Видалити" onclick="deleteRow(this)"></td>
         </tr>
     </tbody>
 </table>
@@ -153,6 +153,11 @@ tables.forEach(function(table, index) {
     cell3.appendChild(select1);
 
     var cell4 = document.createElement("td");
+    var deleteButton = document.createElement("input");
+    deleteButton.type = "button";
+    deleteButton.value = "Видалити";
+    deleteButton.onclick = function() { deleteRow(this); };
+    cell4.appendChild(deleteButton);
 
     // Додавання комірок до нового рядка
     newRow.appendChild(cell1);
@@ -166,6 +171,10 @@ tables.forEach(function(table, index) {
     });
 });
 
+function deleteRow(button) {
+    var row = button.parentNode.parentNode;
+    row.parentNode.removeChild(row);
+}
 </script>
 
 </body>
