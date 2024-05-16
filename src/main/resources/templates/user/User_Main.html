@@ -1,34 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Фільтр таблиці</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Фільтр таблиці</title>
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        border: 2px solid #D2B48C; /* Додано границю кольору #D2B48C */
+    }
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
 
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+    th {
+        background-color: #f2f2f2;
+        font-family: 'Lato', sans-serif;
+        font-size: 18px;
+        font-weight: bold; /* Збільшено жирність заголовків */
+    }
+
+    td {
+        font-family: 'Leelawadee UI', sans-serif;
+        font-size: 14px;
+    }
+
+    input[type="button"] {
+        background-color: white;
+        border: 2px solid #D2B48C;
+        color: #333;
+        padding: 6px 10px;
+        cursor: pointer;
+        border-radius: 5px; /* Заокруглені краї кнопки */
+    }
+
+    input[type="button"]:hover {
+        background-color: #ddd;
+    }
+
+    h2 {
+        font-family: 'Lato', sans-serif;
+        font-size: 24px; /* Збільшено розмір заголовків */
+        font-weight: bold; /* Збільшено жирність заголовків */
+    }
+
+    h3 {
+        font-family: 'Lato', sans-serif;
+        font-size: 18px;
+        font-weight: bold; /* Збільшено жирність заголовків */
+    }
+
+    .my-orders-btn {
+        background-color: #D2B48C;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px; /* Заокруглені краї кнопки */
+        float: right; /* Вирівнювання кнопки праворуч */
+    }
+
+    .my-orders-btn:hover {
+        background-color: #CDA774;
+    }
+</style>
 </head>
 <body>
-
+<button class="my-orders-btn" onclick="window.location.href='User_Order.html'">Мої замовлення</button>
 <h2>Замовлення</h2>
-
 <label for="trainingdate">Дата заняття:</label>
 <input type="date" id="trainingdate" name="trainingdate" min="2024-04-30">
-
-
 <label for="filter">Виберіть назву:</label>
 <select id="filter">
     <option value="0">Всі</option>
@@ -37,123 +86,74 @@
     <option value="3">Bata</option>
 </select>
 
+
 <br>
 <br>
-
-
-<tbody>
-
-<tr th:each="coach, coachIndex : ${coaches}">
-    <img th:src="@{/trener1.png}" style="width:100px"/>
-    <h3 th:text="${coach.getFullName()}">ПІБ тренера</h3>
-    <td>
-        <table>
-            <tr>
-                <th>Рядок</th>
-                <th>Дата відвідування</th>
-                <th>Час відвідування</th>
-                <th>Назва</th>
-                <th>Запис</th>
-            </tr>
-            <tbody>
-            <tr th:each="record, recordIndex : ${coach.scheduleRecords}">
-                <td th:text="${recordIndex.index + 1}">1</td>
-                <td th:text="${record.date}">2024-05-04</td>
-                <td th:text="${record.time}">09:00</td>
-                <td th:text="${record.service}">Yoga1</td>
-                <td><input type="button" value="Запис"></td>
-            </tr>
-            </tbody>
-        </table>
-    </td>
-</tr>
-</tbody>
-
 
 <img src="trener1.png" style="width:100px"/>
 <h3>ПІБ тренера</h3>
 <table>
     <thead>
-    <tr>
-        <th>Рядок</th>
-        <th>Час відвідування</th>
-        <th>Назва</th>
-        <th>Запис</th>
-    </tr>
+        <tr>
+            <th>Рядок</th>
+            <th>Час відвідування</th>
+            <th>Назва</th>
+            <th>Запис</th>
+        </tr>
     </thead>
     <tbody>
-    <tr type=1>
-        <td>1</td>
-        <td>09:00</td>
-        <td>Hata</td>
-        <td><input type="button" value="Запис"></td>
-    </tr>
-    <tr type=2>
-        <td>2</td>
-        <td>09:00</td>
-        <td>Mata</td>
-        <td><input type="button" value="Запис"></td>
-    </tr>
-    <tr type=3>
-        <td>3</td>
-        <td>09:00</td>
-        <td>Bata</td>
-        <td><input type="button" value="Запис"></td>
-    </tr>
-    <tr type=1>
-        <td>4</td>
-        <td>09:00</td>
-        <td>Hata</td>
-        <td><input type="button" value="Запис"></td>
-    </tr>
-    <tr type=2>
-        <td>5</td>
-        <td>09:00</td>
-        <td>Mata</td>
-        <td><input type="button" value="Запис"></td>
-    </tr>
-    <tr type=3>
-        <td>6</td>
-        <td>09:00</td>
-        <td>Bata</td>
-        <td><input type="button" value="Запис"></td>
-    </tr>
-    <tr type=2>
-        <td>7</td>
-        <td>09:00</td>
-        <td>Mata</td>
-        <td><input type="button" value="Запис"></td>
-    </tr>
-    <tr type=1>
-        <td>8</td>
-        <td>09:00</td>
-        <td>Hata</td>
-        <td><input type="button" value="Запис"></td>
-    </tr>
-    <tr type=3>
-        <td>9</td>
-        <td>09:00</td>
-        <td>Bata</td>
-        <td><input type="button" value="Запис"></td>
-    </tr>
+        <tr type=1><td>1</td> <td>09:00</td> <td>Hata</td> <td><input type="button" value="Запис"></td> </tr>
+        <tr type=2><td>2</td> <td>09:00</td> <td>Mata</td> <td><input type="button" value="Запис"></td></tr>
+        <tr type=3><td>3</td> <td>09:00</td> <td>Bata</td> <td><input type="button" value="Запис"></td></tr>
+        <tr type=1><td>4</td> <td>09:00</td> <td>Hata</td> <td><input type="button" value="Запис"></td></tr>
+        <tr type=2><td>5</td> <td>09:00</td> <td>Mata</td> <td><input type="button" value="Запис"></td></tr>
+        <tr type=3><td>6</td> <td>09:00</td> <td>Bata</td> <td><input type="button" value="Запис"></td></tr>
+        <tr type=2><td>7</td> <td>09:00</td> <td>Mata</td> <td><input type="button" value="Запис"></td></tr>
+        <tr type=1><td>8</td> <td>09:00</td> <td>Hata</td> <td><input type="button" value="Запис"></td></tr>
+        <tr type=3><td>9</td> <td>09:00</td> <td>Bata</td> <td><input type="button" value="Запис"></td></tr>
+    </tbody>
+</table>
+<br>
+
+<img src="trener1.png" style="width:100px"/>
+<h3>ПІБ тренера</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Рядок</th>
+            <th>Час відвідування</th>
+            <th>Назва</th>
+            <th>Запис</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr type=1><td>1</td> <td>09:00</td> <td>Hata</td> <td><input type="button" value="Запис"></td> </tr>
+        <tr type=2><td>2</td> <td>09:00</td> <td>Mata</td> <td><input type="button" value="Запис"></td></tr>
+        <tr type=3><td>3</td> <td>09:00</td> <td>Bata</td> <td><input type="button" value="Запис"></td></tr>
+        <tr type=1><td>4</td> <td>09:00</td> <td>Hata</td> <td><input type="button" value="Запис"></td></tr>
+        <tr type=2><td>5</td> <td>09:00</td> <td>Mata</td> <td><input type="button" value="Запис"></td></tr>
+        <tr type=3><td>6</td> <td>09:00</td> <td>Bata</td> <td><input type="button" value="Запис"></td></tr>
+        <tr type=2><td>7</td> <td>09:00</td> <td>Mata</td> <td><input type="button" value="Запис"></td></tr>
+        <tr type=1><td>8</td> <td>09:00</td> <td>Hata</td> <td><input type="button" value="Запис"></td></tr>
+        <tr type=3><td>9</td> <td>09:00</td> <td>Bata</td> <td><input type="button" value="Запис"></td></tr>
     </tbody>
 </table>
 <br>
 
 <script>
-    document.getElementById("filter").addEventListener("change", function () {
+    document.getElementById("filter").addEventListener("change", function() {
         var value = parseInt(this.value);
         var tables = document.getElementsByTagName("table");
-        for (var j = 0; j < tables.length; j++) {
-            var rows = tables[j].getElementsByTagName("tr");
-            for (var i = 1; i < rows.length; i++) {
-                rows[i].style.display = "";
-                if (value == 0) continue;
-                if (rows[i].getAttribute("type") != value) {
-                    rows[i].style.display = "none";
-                }
-            }
-        }
+		for(var j=0;j<tables.length;j++){
+			var rows = tables[j].getElementsByTagName("tr");
+			for (var i = 1; i < rows.length; i++) {
+				rows[i].style.display = "";
+				if(value==0) continue;
+				if(rows[i].getAttribute("type")!=value){
+					rows[i].style.display = "none";
+				}
+			}
+		}
     });
 </script>
 

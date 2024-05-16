@@ -5,12 +5,11 @@ import com.io25.tiloproject.mappers.ScheduleWeekRecordMapper;
 import com.io25.tiloproject.model.Coach;
 import com.io25.tiloproject.model.ScheduleWeekRecord;
 import com.io25.tiloproject.repository.ScheduleWeekRecordRepository;
+import com.io25.tiloproject.services.ScheduleWeekItemService;
 import com.io25.tiloproject.services.ScheduleWeekRecordService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -19,6 +18,7 @@ public class ScheduleWeekRecordServiceImpl implements ScheduleWeekRecordService 
     private ScheduleWeekRecordRepository scheduleWeekRecordRepository;
 
     private ScheduleWeekRecordMapper scheduleWeekRecordMapper;
+    private ScheduleWeekItemService scheduleWeekItemService;
 
     @Override
     public List<ScheduleWeekRecord> getAllScheduleWeekRecords() {
@@ -41,16 +41,14 @@ public class ScheduleWeekRecordServiceImpl implements ScheduleWeekRecordService 
 
     @Override
     public ScheduleWeekRecord getScheduleWeekRecord(Coach coach, Integer day) {
-        return scheduleWeekRecordRepository.findByCoachAndDayOfWeek(coach,day);
+        ScheduleWeekRecord scheduleWeekRecord = scheduleWeekRecordRepository.findByCoachAndDayOfWeek(coach, day);
+        if (scheduleWeekRecord != null) {
+            scheduleWeekRecord.setSchedule(scheduleWeekItemService.findAllByRecordId(scheduleWeekRecord.getId()));
+        }
+        return scheduleWeekRecord;
     }
 
-//    @Override
-//    public ScheduleWeekRecord getScheduleWeekRecord(Coach coach, String day) {
-//        if (coach == null){
-//            return scheduleWeekRecordRepository.findFirstByDayOfWeek(day);
-//        }
-//        return scheduleWeekRecordRepository.findByCoachAndDayOfWeek(coach, day);
-//    }
+
 }
 
 

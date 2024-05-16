@@ -4,6 +4,7 @@ import com.io25.tiloproject.dto.CoachDTO;
 import com.io25.tiloproject.model.Coach;
 import com.io25.tiloproject.model.ScheduleWeekRecord;
 import com.io25.tiloproject.model.YogaService;
+import com.io25.tiloproject.repository.ScheduleRecordRepository;
 import com.io25.tiloproject.services.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -26,13 +27,15 @@ public class AdminController {
     private YogaServiceService yogaServiceService;
     private ScheduleWeekRecordService scheduleWeekRecordService;
     private ScheduleWeekItemService scheduleWeekItemService;
+    private ScheduleRecordService scheduleRecordService;
+    private ScheduleRecordRepository scheduleRecordRepository;
 
     @PostMapping()
     public String handleFormUpload(@Valid CoachDTO coachDTO, BindingResult bindingResult) {
         try {
             coachService.saveNewCoach(coachDTO);
         } catch (Exception ignored) {
-            System.out.println(ignored);
+
         }
         return "redirect:/admin/uploadCoach";
     }
@@ -59,9 +62,6 @@ public class AdminController {
         model.addAttribute("coachSelected", coach);
         Coach currentCoach = coachService.findById(coach).orElse(allCoaches.get(0));
         ScheduleWeekRecord scheduleWeekRecord = scheduleWeekRecordService.getScheduleWeekRecord(currentCoach, day);
-        if (scheduleWeekRecord != null) {
-            scheduleWeekRecord.setSchedule(scheduleWeekItemService.findAllByRecordId(scheduleWeekRecord.getId()));
-        }
         model.addAttribute("scheduleWeekRecord", scheduleWeekRecord);
         return "admin/createSchedule";
     }
@@ -72,37 +72,19 @@ public class AdminController {
         return "redirect:/admin/createSchedule?day=" + day + "&coach=" + coach;
     }
 
-    @GetMapping("full_schedule/add")
-    public String createFullSchedule(){
-
-        return "admin/fullSchedule";
+    @PostMapping("full_schedule/add")
+    public String createFullSchedule() throws IOException {
+        scheduleRecordService.saveNewScheduleRecord();
+        return "redirect:/admin/fullSchedule";
+    }
+    @GetMapping("/fullSchedule")
+    public String showFullSchedule() throws IOException {
+        return "/admin/fullSchedule";
     }
 
 
-//    @GetMapping("/schedule/load")
-//    public String loadWeekRecords( String day, String coach, Model model) throws IOException {
-//        List<Coach> allCoaches = coachService.getAllCoaches();
-//        model.addAttribute("coaches", allCoaches);
-//        List<YogaService> allServices = yogaServiceService.getAllServices();
-//        model.addAttribute("services", allServices);
-////        ScheduleWeekRecord scheduleWeekRecord = scheduleWeekRecordService.getScheduleWeekRecord(scheduleWeekRecordDTO);
-////        model.addAttribute("scheduleWeekRecord",scheduleWeekRecord);
-//        return "admin/createSchedule";
-//    }
 
 
-//    @PostMapping("/schedule/add")
-//    public String handleFormUpload(@RequestBody ScheduleWeekRecordDTO t) {
-//        try {
-//            System.out.println(t);
-//        } catch (Exception ignored){
-//
-//        }
-//        return "redirect:/admin/createSchedule";
-//    }
 
-//    private void loadServices(Model model) {
-//        List<Coach> allCoaches = coachService.getAllCoaches();
-//        model.addAttribute(SERVICES_ATTRIBUTE_NAME, allCoaches);
-//    }
+
 }

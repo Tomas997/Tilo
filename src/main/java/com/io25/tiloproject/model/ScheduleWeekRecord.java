@@ -14,9 +14,8 @@ public class ScheduleWeekRecord {
 
     private Integer dayOfWeek;
 
-    //TODO Change to string (?)
     @ManyToOne
-    private Coach coach; /////////////////////////////////////////////////////////////!!!!!!!!!!!!!!!!!!!!!
+    private Coach coach;
     @Transient
     private List<ScheduleWeekItem> schedule;
 
