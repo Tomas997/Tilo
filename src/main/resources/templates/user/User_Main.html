@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html data-bs-theme="light" lang="uk"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -76,69 +77,76 @@
 <body>
 <button class="my-orders-btn" onclick="window.location.href='User_Order.html'">Мої замовлення</button>
 <h2>Замовлення</h2>
-<label for="trainingdate">Дата заняття:</label>
-<input type="date" id="trainingdate" name="trainingdate" min="2024-04-30">
+<label for="trainingDate">Дата заняття:</label>
+<form id="myForm">
+    <input type="date" id="trainingDate" name="trainingDate" th:value="${currentDay}">
+    <button id="loadButton" type="submit">Показати</button>
+</form>
+
 <label for="filter">Виберіть назву:</label>
+
+
 <select id="filter">
     <option value="0">Всі</option>
-    <option value="1">Hata</option>
-    <option value="2">Mata</option>
-    <option value="3">Bata</option>
+    <option th:each="service, iterStat : ${services}" th:value="${service.key}" th:text="${service.value.getFirst().getName()}"></option>
 </select>
 
 
+
 <br>
 <br>
 
-<img src="trener1.png" style="width:100px"/>
-<h3>ПІБ тренера</h3>
-<table>
-    <thead>
+<div th:each="record, iterStat : ${scheduleRecords}">
+    <img th:src="@{'/src/img/'+${record.getCoach().imgName}}" style="width:100px"/>
+    <h3 th:text="${record.getCoach().getFullName()}">ПІБ тренера</h3>
+    <table>
+        <thead>
         <tr>
             <th>Рядок</th>
             <th>Час відвідування</th>
             <th>Назва</th>
             <th>Запис</th>
         </tr>
-    </thead>
-    <tbody>
-        <tr type=1><td>1</td> <td>09:00</td> <td>Hata</td> <td><input type="button" value="Запис"></td> </tr>
-        <tr type=2><td>2</td> <td>09:00</td> <td>Mata</td> <td><input type="button" value="Запис"></td></tr>
-        <tr type=3><td>3</td> <td>09:00</td> <td>Bata</td> <td><input type="button" value="Запис"></td></tr>
-        <tr type=1><td>4</td> <td>09:00</td> <td>Hata</td> <td><input type="button" value="Запис"></td></tr>
-        <tr type=2><td>5</td> <td>09:00</td> <td>Mata</td> <td><input type="button" value="Запис"></td></tr>
-        <tr type=3><td>6</td> <td>09:00</td> <td>Bata</td> <td><input type="button" value="Запис"></td></tr>
-        <tr type=2><td>7</td> <td>09:00</td> <td>Mata</td> <td><input type="button" value="Запис"></td></tr>
-        <tr type=1><td>8</td> <td>09:00</td> <td>Hata</td> <td><input type="button" value="Запис"></td></tr>
-        <tr type=3><td>9</td> <td>09:00</td> <td>Bata</td> <td><input type="button" value="Запис"></td></tr>
-    </tbody>
-</table>
-<br>
-
-<img src="trener1.png" style="width:100px"/>
-<h3>ПІБ тренера</h3>
-<table>
-    <thead>
-        <tr>
-            <th>Рядок</th>
-            <th>Час відвідування</th>
-            <th>Назва</th>
-            <th>Запис</th>
+        </thead>
+        <tbody>
+        <tr th:type="${item.getService()}" th:each="item, schedStat : ${record.getSchedule()}">
+            <td th:text="${schedStat.count}"></td>
+            <td th:text="${item.getTime()}">09:00</td>
+            <td th:text="${services.get(item.getService()).getFirst().getName()}"></td>
+            <td th:text="${item.getQuantity()}"></td>
+            <td><input type="button" value="Запис"></td>
         </tr>
-    </thead>
-    <tbody>
-        <tr type=1><td>1</td> <td>09:00</td> <td>Hata</td> <td><input type="button" value="Запис"></td> </tr>
-        <tr type=2><td>2</td> <td>09:00</td> <td>Mata</td> <td><input type="button" value="Запис"></td></tr>
-        <tr type=3><td>3</td> <td>09:00</td> <td>Bata</td> <td><input type="button" value="Запис"></td></tr>
-        <tr type=1><td>4</td> <td>09:00</td> <td>Hata</td> <td><input type="button" value="Запис"></td></tr>
-        <tr type=2><td>5</td> <td>09:00</td> <td>Mata</td> <td><input type="button" value="Запис"></td></tr>
-        <tr type=3><td>6</td> <td>09:00</td> <td>Bata</td> <td><input type="button" value="Запис"></td></tr>
-        <tr type=2><td>7</td> <td>09:00</td> <td>Mata</td> <td><input type="button" value="Запис"></td></tr>
-        <tr type=1><td>8</td> <td>09:00</td> <td>Hata</td> <td><input type="button" value="Запис"></td></tr>
-        <tr type=3><td>9</td> <td>09:00</td> <td>Bata</td> <td><input type="button" value="Запис"></td></tr>
-    </tbody>
-</table>
-<br>
+        </tbody>
+    </table>
+    <br>
+</div>
+
+
+
+<!--<img src="trener1.png" style="width:100px"/>-->
+<!--<h3>ПІБ тренера</h3>-->
+<!--<table>-->
+<!--    <thead>-->
+<!--        <tr>-->
+<!--            <th>Рядок</th>-->
+<!--            <th>Час відвідування</th>-->
+<!--            <th>Назва</th>-->
+<!--            <th>Запис</th>-->
+<!--        </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--        <tr type=1><td>1</td> <td>09:00</td> <td>Hata</td> <td><input type="button" value="Запис"></td> </tr>-->
+<!--        <tr type=2><td>2</td> <td>09:00</td> <td>Mata</td> <td><input type="button" value="Запис"></td></tr>-->
+<!--        <tr type=3><td>3</td> <td>09:00</td> <td>Bata</td> <td><input type="button" value="Запис"></td></tr>-->
+<!--        <tr type=1><td>4</td> <td>09:00</td> <td>Hata</td> <td><input type="button" value="Запис"></td></tr>-->
+<!--        <tr type=2><td>5</td> <td>09:00</td> <td>Mata</td> <td><input type="button" value="Запис"></td></tr>-->
+<!--        <tr type=3><td>6</td> <td>09:00</td> <td>Bata</td> <td><input type="button" value="Запис"></td></tr>-->
+<!--        <tr type=2><td>7</td> <td>09:00</td> <td>Mata</td> <td><input type="button" value="Запис"></td></tr>-->
+<!--        <tr type=1><td>8</td> <td>09:00</td> <td>Hata</td> <td><input type="button" value="Запис"></td></tr>-->
+<!--        <tr type=3><td>9</td> <td>09:00</td> <td>Bata</td> <td><input type="button" value="Запис"></td></tr>-->
+<!--    </tbody>-->
+<!--</table>-->
+<!--<br>-->
 
 <script>
     document.getElementById("filter").addEventListener("change", function() {
@@ -155,6 +163,7 @@
 			}
 		}
     });
+
 </script>
 
 </body>

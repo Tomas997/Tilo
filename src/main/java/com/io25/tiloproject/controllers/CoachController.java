@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 
 @RequestMapping("/coach")
@@ -24,8 +25,8 @@ public class CoachController {
     private CoachService coachService;
 
     @GetMapping("/{id}")
-    public String getCoach(@PathVariable Long id, Model model){
-        loadServices(model,id);
+    public String getCoach(@PathVariable Long id, Model model) {
+        loadServices(model, id);
         return "coach/Coach_Main";
     }
 
@@ -34,11 +35,19 @@ public class CoachController {
         coachService.deleteById(Long.parseLong(id));
         try {
             URL referer = new URL(request.getHeader("referer"));
-            return "redirect:"+referer.getPath();
-        } catch (MalformedURLException e){
+            return "redirect:" + referer.getPath();
+        } catch (MalformedURLException e) {
             return "redirect:/";
         }
     }
+
+    @GetMapping("/instructors.html")
+    public String getInstructors(Model model) {
+        List<Coach> allCoaches = repository.findAll();
+        model.addAttribute("coaches", allCoaches);
+        return "coach/instructors.html";
+    }
+
     private void loadServices(Model model, Long id) {
         Optional<Coach> coach = repository.findById(id);
         coach.ifPresent(coach1 -> {

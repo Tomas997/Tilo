@@ -1,12 +1,16 @@
 package com.io25.tiloproject.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 public class ScheduleWeekRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

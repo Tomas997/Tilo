@@ -1,12 +1,14 @@
 package com.io25.tiloproject.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 public class Coach {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,4 +26,6 @@ public class Coach {
     private String imgName;
     @OneToMany(fetch = FetchType.EAGER)
     private List<ScheduleRecord> scheduleRecords;
+
+
 }

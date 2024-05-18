@@ -2,6 +2,7 @@ package com.io25.tiloproject.controllers;
 
 import com.io25.tiloproject.dto.CoachDTO;
 import com.io25.tiloproject.model.Coach;
+import com.io25.tiloproject.model.ScheduleRecord;
 import com.io25.tiloproject.model.ScheduleWeekRecord;
 import com.io25.tiloproject.model.YogaService;
 import com.io25.tiloproject.repository.ScheduleRecordRepository;
@@ -15,7 +16,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -77,14 +81,30 @@ public class AdminController {
         scheduleRecordService.saveNewScheduleRecord();
         return "redirect:/admin/fullSchedule";
     }
+
     @GetMapping("/fullSchedule")
-    public String showFullSchedule() throws IOException {
+    public String showFullSchedule(Model model,
+                                   @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}") LocalDate trainingDate)  {
+        List<ScheduleRecord> scheduleRecords = scheduleRecordService.findAllRecordsByDate(trainingDate);
+        model.addAttribute("scheduleRecords", scheduleRecords);
+        List<YogaService> services = yogaServiceService.getAllServices();
+        Map<Long, List<YogaService>> allServices = services.stream().collect(Collectors.groupingBy(YogaService::getId));
+        model.addAttribute("services", allServices);
+        model.addAttribute("currentDay", trainingDate);
         return "/admin/fullSchedule";
     }
 
-
-
-
+    @GetMapping("/adminMain")
+    public String adminMain(Model model,
+                            @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}") LocalDate trainingDate) {
+        List<ScheduleRecord> scheduleRecords = scheduleRecordService.findAllRecordsByDate(trainingDate);
+        model.addAttribute("scheduleRecords", scheduleRecords);
+        List<YogaService> services = yogaServiceService.getAllServices();
+        Map<Long, List<YogaService>> allServices = services.stream().collect(Collectors.groupingBy(YogaService::getId));
+        model.addAttribute("services", allServices);
+        model.addAttribute("currentDay", trainingDate);
+        return "/admin/Admin_Main";
+    }
 
 
 }

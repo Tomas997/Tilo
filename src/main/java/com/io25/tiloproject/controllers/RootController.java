@@ -1,6 +1,7 @@
 package com.io25.tiloproject.controllers;
 
 import com.io25.tiloproject.model.Role;
+import com.io25.tiloproject.services.YogaServiceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -10,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.io25.tiloproject.services.YogaServiceService;
 
 import java.util.List;
 
@@ -41,6 +41,10 @@ public class RootController {
     public String getHome(Authentication authentication){
         System.out.println(((SimpleGrantedAuthority)authentication.getAuthorities().toArray()[0]).getAuthority());
         return "redirect:"+ Role.valueOf(((SimpleGrantedAuthority)authentication.getAuthorities().toArray()[0]).getAuthority()).getHomePage();
+    }
+    @GetMapping("instructors.html")
+    public String getInstructors(){
+        return "redirect:coach/instructors.html";
     }
 
 
