@@ -1,10 +1,12 @@
 package com.io25.tiloproject.controllers;
 
+import com.io25.tiloproject.config.TiloUserDetails;
 import com.io25.tiloproject.model.Coach;
 import com.io25.tiloproject.repository.CoachRepository;
 import com.io25.tiloproject.services.CoachService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,6 +30,11 @@ public class CoachController {
     public String getCoach(@PathVariable Long id, Model model) {
         loadServices(model, id);
         return "coach/Coach_Main";
+    }
+
+    @GetMapping("")
+    public String redirectCoachHome(Authentication authentication) {
+        return "redirect:coach/" + ((TiloUserDetails) authentication.getPrincipal()).getUserId();
     }
 
     @DeleteMapping("/{id}/delete")

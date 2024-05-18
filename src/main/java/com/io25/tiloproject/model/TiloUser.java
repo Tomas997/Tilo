@@ -1,26 +1,27 @@
 package com.io25.tiloproject.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.Hibernate;
 
-import java.util.List;
 import java.util.Objects;
 
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @Entity
+@Builder
 @Table(name = "users")
+@NoArgsConstructor
+@AllArgsConstructor
 public class TiloUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String fullName;
+    @Column(unique = true)
+    private String phone;
     @Column(unique = true)
     private String username;
 
@@ -42,3 +43,5 @@ public class TiloUser {
         return getClass().hashCode();
     }
 }
+
+

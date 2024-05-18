@@ -70,6 +70,7 @@ public class SecurityConfig {
                 .formLogin(
                         login ->
                                 login
+                                        .loginPage("/cabinet.html")
                                         .permitAll()
                                         .successForwardUrl("/home")
                 )

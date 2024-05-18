@@ -17,6 +17,10 @@ public class TiloUserDetails implements UserDetails {
         this.tiloUser = tiloUser;
     }
 
+    public Long getUserId(){
+        return tiloUser.getId();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(tiloUser.getRole().toString()));

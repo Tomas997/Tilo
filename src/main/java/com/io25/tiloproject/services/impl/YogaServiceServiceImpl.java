@@ -2,13 +2,13 @@ package com.io25.tiloproject.services.impl;
 
 import com.io25.tiloproject.dto.YogaServiceDTO;
 import com.io25.tiloproject.mappers.YogaServiceMapper;
+import com.io25.tiloproject.model.YogaService;
+import com.io25.tiloproject.repository.YogaServicesRepository;
 import com.io25.tiloproject.services.ImageService;
+import com.io25.tiloproject.services.YogaServiceService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.io25.tiloproject.model.YogaService;
-import com.io25.tiloproject.services.YogaServiceService;
-import com.io25.tiloproject.repository.YogaServicesRepository;
 
 import java.io.IOException;
 import java.util.List;

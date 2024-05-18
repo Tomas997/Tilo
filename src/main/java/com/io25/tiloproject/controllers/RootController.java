@@ -27,23 +27,45 @@ public class RootController {
     private final YogaServiceService yogaServiceService;
 
     @GetMapping("services.html")
-    public String getService(Model model){
+    public String getService(Model model) {
         loadServices(model);
-        return SERVICES_VIEW_NAME;
+        return "services/services";
+    }
+
+    @GetMapping("/cabinet.html")
+    public String getCabinet(Authentication authentication) {
+        if (authentication != null && authentication.isAuthenticated()) {
+            return "redirect:/home";
+        }
+        return "/cabinet/cabinet";
     }
 
     @GetMapping("prices.html")
-    public String getPrice(Model model){
+    public String getPrice(Model model) {
         loadServices(model);
         return PRICES_VIEW_NAME;
     }
-    @PostMapping("home")
-    public String getHome(Authentication authentication){
-        System.out.println(((SimpleGrantedAuthority)authentication.getAuthorities().toArray()[0]).getAuthority());
-        return "redirect:"+ Role.valueOf(((SimpleGrantedAuthority)authentication.getAuthorities().toArray()[0]).getAuthority()).getHomePage();
+
+    private String handleHome(Authentication authentication) {
+        if (!(authentication != null && authentication.isAuthenticated())) {
+            return "redirect:/cabinet.html";
+        }
+        return "redirect:" + Role.valueOf(((SimpleGrantedAuthority) authentication.getAuthorities().toArray()[0]).getAuthority()).getHomePage();
     }
+
+    @PostMapping("home")
+    public String postHome(Authentication authentication) {
+        return handleHome(authentication);
+    }
+
+    @GetMapping("home")
+    public String getHome(Authentication authentication) {
+        return handleHome(authentication);
+    }
+
+
     @GetMapping("instructors.html")
-    public String getInstructors(){
+    public String getInstructors() {
         return "redirect:coach/instructors.html";
     }
 

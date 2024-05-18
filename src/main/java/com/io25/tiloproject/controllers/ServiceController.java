@@ -26,13 +26,6 @@ public class ServiceController {
 
     private final YogaServiceService yogaServiceService;
 
-//    @DeleteMapping("{id}/delete")
-//    public String deleteById(@PathVariable String id, HttpServletRequest request){
-//        System.out.println(RequestContextHolder.currentRequestAttributes());
-//        yogaServiceService.deleteById(Long.parseLong(id));
-//        return "redirect:/prices.html";
-//    }
-
     @DeleteMapping("{id}/delete")
     public String deleteById(@PathVariable String id, HttpServletRequest request) {
         yogaServiceService.deleteById(Long.parseLong(id));
@@ -57,8 +50,9 @@ public class ServiceController {
     @GetMapping
     public String upload(Model model) {
         loadServices(model);
-        return "services/upload.html";
+        return "services/upload";
     }
+
 
     private void loadServices(Model model) {
         List<YogaService> allServices = yogaServiceService.getAllServices();

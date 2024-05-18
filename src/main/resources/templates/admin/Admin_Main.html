@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="uk"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фільтр таблиці</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 2px solid #D2B48C; /* Додано границю кольору #D2B48C */
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-family: 'Lato', sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        td {
+            font-family: 'Leelawadee UI', sans-serif;
+            font-size: 14px;
+        }
+
+        h2 {
+            font-family: 'Lato', sans-serif;
+            font-size: 24px; /* Збільшено розмір заголовків */
+            font-weight: bold; /* Збільшено жирність заголовків */
+        }
+
+        input[type="button"] {
+            background-color: white;
+            border: 2px solid #D2B48C;
+            color: #333;
+            padding: 6px 10px;
+            cursor: pointer;
+            border-radius: 5px; /* Заокруглені краї кнопки */
+        }
+
+        input[type="button"]:hover {
+            background-color: #ddd;
+        }
+
+        .back-btn {
+            background-color: #D2B48C;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px; /* Заокруглені краї кнопки */
+            float: right; /* Вирівнювання кнопки праворуч */
+        }
+
+        .back-btn:hover {
+            background-color: #CDA774;
+        }
+
+        #popup a {
+            color: #333; /* Колір тексту */
+            font-size: 16px; /* Розмір шрифту */
+            text-decoration: none; /* Відсутність підкреслення */
+        }
+
+        #popup a:hover {
+            color: #D2B48C; /* Колір тексту при наведенні */
+            text-decoration: underline; /* Підкреслення при наведенні */
+        }
+
+        #popup table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #popup th, #popup td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        #popup th {
+            padding-right: 10px;
+        }
+
+    </style>
+</head>
+<body>
+<button class="back-btn" onclick="window.location.href='Admin_CreateSchedule.html'">Назад</button>
+<h2>Інформація</h2>
+
+<form id="myForm">
+    <input type="date" id="trainingDate" name="trainingDate" th:value="${currentDay}">
+    <button id="loadButton" type="submit">Показати</button>
+</form>
+
+<select id="filter">
+    <option value="0">Всі</option>
+    <option th:each="service, iterStat : ${services}" th:value="${service.key}"
+            th:text="${service.value.getFirst().getName()}"></option>
+</select>
+
+<br>
+
+<div th:each="record, iterStat : ${scheduleRecords}">
+    <img th:src="@{'/src/img/'+${record.getCoach().imgName}}" style="width:100px"/>
+    <h3 th:text="${record.getCoach().getFullName()}">ПІБ тренера</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>Рядок</th>
+            <th>Час початку заняття</th>
+            <th>Назва</th>
+            <th>Зареєстровано</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:type="${item.getService()}" th:each="item, schedStat : ${record.getSchedule()}">
+            <td th:text="${schedStat.count}"></td>
+            <td th:text="${item.getTime()}">09:00</td>
+            <td th:text="${services.get(item.getService()).getFirst().getName()}"></td>
+            <td th:text="${item.getQuantity()}"></td>
+<!--            <td><input type="button" value="Скасувати" th:onclick="'showPopup('+${schedStat}+', \'ПІБ2\')'"/></td>-->
+            <td><input type="button" value="Скасувати" th:onclick="'showPopup(\''  + ${item.getService()} +  '\', \'ПІБ2\');'"/></td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+</div>
+
+<br>
+<br>
+
+<div id="popup"
+     style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #fff; padding: 20px; border: 2px solid #D2B48C; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); z-index: 9999; max-height: 80%; width: 400px; overflow-y: auto;">
+</div>
+
+<script>
+    // Функція для закриття pop-up вікна
+    function closePopup() {
+        var popup = document.getElementById('popup');
+        popup.innerHTML = '';
+        popup.style.display = 'none';
+    }
+
+    // Функція для показу pop-up вікна
+    function showPopup(index, name) {
+        var popup = document.getElementById('popup');
+        popup.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>Список клієнтів</h2>
+            <a href="#" onclick="closePopup()">Закрити</a>
+        </div>
+        <!-- Таблиця для виведення ПІБ та телефону кожного клієнта -->
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <th style="text-align: left; padding-right: 10px;">ПІБ</th>
+                <th style="text-align: left;">Телефон</th>
+            </tr>
+            <tr>
+                <td>${name}1</td>
+                <td>тел.1</td>
+            </tr>
+            <tr>
+                <td>${name}2</td>
+                <td>тел.2</td>
+            </tr>
+            <tr>
+                <td>${name}3</td>
+                <td>тел.3</td>
+            </tr>
+        </table>`;
+        popup.style.display = 'block';
+    }
+</script>
+</body>
+</html>
