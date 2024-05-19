@@ -8,21 +8,47 @@ import com.io25.tiloproject.services.ScheduleItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 @Service
 @AllArgsConstructor
 public class ScheduleItemServiceImpl implements ScheduleItemService {
 
-    private TiloUserRepository tiloUserRepository;
+    private final TiloUserRepository tiloUserRepository;
+    private final ScheduleItemRepository scheduleItemRepository;
 
-
-    private ScheduleItemRepository scheduleItemRepository;
     @Override
     public void bookScheduleItem(Long id, Long scheduleItemId) {
         TiloUser user = tiloUserRepository.findTiloUserById(id).orElseThrow(() -> new RuntimeException("Користувача не знайдено"));
         ScheduleItem scheduleItem = scheduleItemRepository.findById(scheduleItemId).orElseThrow(() -> new RuntimeException("Заняття не знайдено"));
-        scheduleItem.setQuantity(scheduleItem.getQuantity()+1);
+
+        if (user.getScheduleItems().contains(scheduleItem)) {
+            return;
+        }
+
+        scheduleItem.setQuantity(scheduleItem.getQuantity() + 1);
         user.getScheduleItems().add(scheduleItem);
         scheduleItemRepository.save(scheduleItem);
         tiloUserRepository.save(user);
     }
+
+    @Override
+    public void unBookScheduleItem(Long id, Long scheduleItemId) {
+        TiloUser user = tiloUserRepository.findTiloUserById(id).orElseThrow(() -> new RuntimeException("Користувача не знайдено"));
+        ScheduleItem scheduleItem = scheduleItemRepository.findById(scheduleItemId).orElseThrow(() -> new RuntimeException("Заняття не знайдено"));
+
+        if (!user.getScheduleItems().contains(scheduleItem)) {
+            return;
+        }
+
+
+
+        scheduleItem.setQuantity(scheduleItem.getQuantity() - 1);
+        user.getScheduleItems().remove(scheduleItem);
+        scheduleItemRepository.save(scheduleItem);
+        tiloUserRepository.save(user);
+    }
 }
+

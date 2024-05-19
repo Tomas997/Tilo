@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -50,6 +52,7 @@ public class UserController {
     }
     @GetMapping("User_Order.html")
     public String order(){
+
         return "user/User_Order";
     }
 
@@ -67,14 +70,36 @@ public class UserController {
         return "redirect:/cabinet.html";
     }
 
-    @PostMapping("/sign_up_item")
-    public String signUp(@RequestParam Long scheduleItemId, Authentication authentication){
+    @PostMapping("/subscribe")
+    public String subscribe(@RequestParam Long scheduleItemId, Authentication authentication,
+                         @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}") LocalDate trainingDate,
+                         @RequestParam(required = false) String plannedTime){
+        if (authentication==null){
+            return "redirect:/cabinet.html";
+        }
+
+//        LocalDate date = LocalDate.parse(trainingDate);
+//
+//        // Convert time to LocalTime
+//        LocalTime parsedTime = LocalTime.parse(time);
+//
+//        // Combine date and time to get LocalDateTime
+//        LocalDateTime dateTime = LocalDateTime.of(date, parsedTime);
+
+        Long id = ((TiloUserDetails) authentication.getPrincipal()).getUserId();
+        scheduleItemService.bookScheduleItem(id,scheduleItemId);
+        return "redirect:/user/orders?"+"trainingDate="+trainingDate;
+    }
+
+    @PostMapping("/unsubscribe")
+    public String unSubscribe(@RequestParam Long scheduleItemId, Authentication authentication,
+                         @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}") LocalDate trainingDate){
         if (authentication==null){
             return "redirect:/cabinet.html";
         }
         Long id = ((TiloUserDetails) authentication.getPrincipal()).getUserId();
-        scheduleItemService.bookScheduleItem(id,scheduleItemId);
-        return "redirect:/user/orders";
+        scheduleItemService.unBookScheduleItem(id,scheduleItemId);
+        return "redirect:/user/orders?"+"trainingDate="+trainingDate;
     }
 
 }

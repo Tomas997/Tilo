@@ -5,7 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Фільтр таблиці</title>
     <style>
-        /* Ваші існуючі стилі */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 2px solid #D2B48C; /* Додано границю кольору #D2B48C */
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-family: 'Lato', sans-serif;
+            font-size: 18px;
+            font-weight: bold; /* Збільшено жирність заголовків */
+        }
+
+        td {
+            font-family: 'Leelawadee UI', sans-serif;
+            font-size: 14px;
+        }
+
+        input[type="button"] {
+            background-color: white;
+            border: 2px solid #D2B48C;
+            color: #333;
+            padding: 6px 10px;
+            cursor: pointer;
+            border-radius: 5px; /* Заокруглені краї кнопки */
+        }
+
+        input[type="button"]:hover {
+            background-color: #ddd;
+        }
+
+        h2 {
+            font-family: 'Lato', sans-serif;
+            font-size: 24px; /* Збільшено розмір заголовків */
+            font-weight: bold; /* Збільшено жирність заголовків */
+        }
+
+        h3 {
+            font-family: 'Lato', sans-serif;
+            font-size: 18px;
+            font-weight: bold; /* Збільшено жирність заголовків */
+        }
+
+        .my-orders-btn {
+            background-color: #D2B48C;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px; /* Заокруглені краї кнопки */
+            float: right; /* Вирівнювання кнопки праворуч */
+        }
+
+        .my-orders-btn:hover {
+            background-color: #CDA774;
+        }
     </style>
 </head>
 <body>
@@ -34,7 +99,9 @@
             <th>Рядок</th>
             <th>Час відвідування</th>
             <th>Назва</th>
+            <th>Записалось</th>
             <th>Запис</th>
+            <th>Відписатись</th>
         </tr>
         </thead>
         <tbody>
@@ -44,9 +111,19 @@
             <td th:text="${services.get(item.getService()).getFirst().getName()}"></td>
             <td th:text="${item.getQuantity()}"></td>
             <td>
-                <form action="/user/sign_up_item" method="post">
+                <form action="/user/subscribe" method="post">
+                    <input type="hidden" name="trainingDate" th:value="${currentDay}" />
                     <input type="hidden" name="scheduleItemId" th:value="${item.getId()}" />
+                    <input type="hidden" name="plannedTime" th:value="${item.getTime()}" />
                     <input type="submit" value="Запис" />
+                </form>
+            </td>
+            <td>
+                <form action="/user/unsubscribe" method="post">
+                    <input type="hidden" name="trainingDate" th:value="${currentDay}" />
+                    <input type="hidden" name="scheduleItemId" th:value="${item.getId()}" />
+                    <input type="hidden" name="plannedTime" th:value="${item.getTime()}" />
+                    <input type="submit" value="Відписатись" />
                 </form>
             </td>
         </tr>
@@ -54,6 +131,7 @@
     </table>
     <br>
 </div>
+
 
 <script>
     document.getElementById("filter").addEventListener("change", function() {

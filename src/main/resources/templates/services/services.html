@@ -1,25 +1,31 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Сайт</title>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Підключаємо шрифт Lato -->
     <link href="https://fonts.googleapis.com/css2?family=Kristi&display=swap" rel="stylesheet">
+    <!-- Підключаємо шрифт Kristi -->
 
     <style>
+        /* Загальні стилі для тексту */
         body {
-            font-family: 'Lato', sans-serif;
+            font-family: 'Lato', sans-serif; /* Загальний шрифт для всього документу */
         }
 
+        /* Стилі для навбару */
         .navbar {
-            background-color: #DDE1E4;
+            background-color: #DDE1E4; /* Колір фону для навбару */
         }
 
         .navbar-nav .nav-link:hover {
-            font-weight: bold;
+            font-weight: bold; /* Зробити текст жирним при наведенні */
         }
 
+        /* Стилі для футера */
         .footer {
             background-color: #CACED2;
             padding: 20px;
@@ -27,12 +33,15 @@
             height: 180px;
         }
 
+
+        /* Стилі для зображення */
         .image {
             max-width: calc(100% - 60px);
             height: auto;
-            margin-left: 50px;
+            margin-left: 50px; /* Відступ зліва для зображення */
         }
 
+        /* Стилі для блоку про медитації */
         .grey-block {
             background-color: #E5E8EB;
             padding: 20px;
@@ -41,15 +50,16 @@
         .text {
             font-size: 22px;
             font-weight: normal;
-            margin-left: 40px;
+            margin-left: 40px; /* Відступ зліва для тексту */
             margin-top: 8px;
             text-align: center;
         }
 
+        /* Стилі для тексту про медитації */
         .text_medi {
             font-size: 24px;
             font-weight: normal;
-            margin-left: 20px;
+            margin-left: 20px; /* Відступ зліва для тексту */
             margin-top: 50px;
             text-align: center;
         }
@@ -61,36 +71,23 @@
         }
 
         .container {
-            display: flex;
+            display: flex; /* Встановлюємо flex контейнер */
         }
 
-        .text-column {
-            margin-top: 20px;
-            width: 70%;
-            box-sizing: border-box;
-            padding: 20px;
-            margin-left: 10px;
-        }
-
-        .image-column {
-            margin-top: 20px;
-            width: 50%;
-            box-sizing: border-box;
-            padding: 20px;
-            text-align: right;
-        }
-
-        .image-column img {
-            max-width: 100%;
-            height: 350px;
-            width: 350px;
-            display: inline-block;
+        #service-image {
+            width: auto; /* Змініть це значення на бажаний розмір */
+            height: 500px; /* Автоматична висота, щоб зберегти пропорції */
+            margin-left: 150px;
+            margin-right: 100px;
+            margin-top: 30px;
+            margin-bottom: 30px;
         }
 
         .text_1 {
             font-size: 18px;
             font-weight: normal;
             margin-top: 11px;
+            margin-right: 100px;
         }
     </style>
 
@@ -109,90 +106,90 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="/index.html#home">Головна</a>
+                    <a class="nav-link" href="index.html#home">Головна</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/index.html#about-us-section">Про нас</a>
+                    <a class="nav-link" href="index.html#about-us-section">Про нас</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/index.html#place">Адреса</a>
+                    <a class="nav-link" href="index.html#place">Адреса</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/services.html">Напрямки</a>
+                    <a class="nav-link" href="#classes">Напрямки</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/instructors.html">Тренери</a>
+                    <a class="nav-link" href="prices.html">Ціни</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/prices.html">Ціни</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/cabinet.html">Кабінет</a>
+                    <a class="nav-link" href="cabinet.html">Кабінет</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
 
-<div id="clasess" class="container">
-    <div class="text-column">
-        <section class="page-section" th:each="service, iterStat : ${services}">
-            <div>
-                <h2 class="heading" th:utext="${service.shortDescription}">Занурення у Глибини Тіла та Душі:<span
-                        th:utext="${service.name}">ХАТХА-ЙОГА</span></h2>
-            </div>
-            <p class="text_1" th:utext="${service.description}">Основною метою хатха-йоги є досягнення гармонії між
-                тілом і розумом&nbsp;шляхом очищення і зміцнення тіла, розвитку внутрішньої концентрації та&nbsp;спокою.
-                Це досягається через різноманітні фізичні та дихальні вправи,&nbsp;які допомагають підготувати тіло і
-                розум до більш високих стадій&nbsp;медитації. Практики хатха-йоги можуть включати асани (пози), пранаями&nbsp;(дихальні
-                техніки), мудри (ритуальні жести або пози рук), бандхи (енергетичні затиснення), а також широкий
-                спектр<br>технік релаксації та&nbsp;концентрації.</p>
-        </section>
-    </div>
-    <div class="image-column">
-        <section th:each="service, iterStat : ${services}">
-            <img alt="" src="yoga1.jpg" th:src="@{'/src/img/'+${service.imgName}}" id="service-image">
-        </section>
-    </div>
-</div>
+<table>
+    <tr>
 
-<div class="container-fluid mt-9">
+        <td>
+            <section class="page-section" th:each="service, iterStat : ${services}">
+                <img alt="" src="yoga1.jpg" th:src="@{'/src/img/'+${service.imgName}}" id="service-image">
+                <div>
+                    <h2 class="heading" th:utext="${service.shortDescription}">Занурення у Глибини Тіла та Душі:<span
+                            th:utext="${service.name}">ХАТХА-ЙОГА</span></h2>
+                </div>
+                <p class="text_1" th:utext="${service.description}">Основною метою хатха-йоги є досягнення гармонії між
+                    тілом і розумом&nbsp;шляхом очищення і зміцнення тіла, розвитку внутрішньої концентрації та&nbsp;спокою.
+                    Це досягається через різноманітні фізичні та дихальні вправи,&nbsp;які допомагають підготувати тіло
+                    і розум до більш високих стадій&nbsp;медитації. Практики хатха-йоги можуть включати асани (пози),
+                    пранаями&nbsp;(дихальні техніки), мудри (ритуальні жести або пози рук), бандхи (енергетичні
+                    затиснення), а також широкий спектр<br>технік релаксації та&nbsp;концентрації.</p>
+            </section>
+        </td>
+    </tr>
+</table>
+
+<div class="container-fluid mt-9"> <!-- Про медитації, цвяхостояння -->
     <div class="row">
         <div class="col-md-6 p-0">
             <div class="grey-block">
-                <img src="medi.jpg" alt="meditation" class="image" style="margin-left:50px;">
+                <img src="medi.jpg" alt="meditation" class="image"> <!-- Додаємо зображення -->
             </div>
         </div>
         <div id="meditation" class="col-md-6 p-0">
-            <div class="grey-block" style="padding: 20px;">
-                <h2 class="heading" style="text-align: center; margin-top: 150px; margin-left: 10px">Інші практики</h2>
-                <p class="text_medi">У нашій студії ми також пропонуємо спробувати практики саундхілінгу чи
-                    цвяхостояння.<br>
-                    Проводяться як групові, так й індивідуальні.<br>
-                </p>
-                <p class="text_medi" style="margin-bottom: 241.5px">*Саундхілінг - практика глибокого розслаблення та
-                    гармонізації внутрішнього стану. Практика проводиться лежачи під звучання живих інструментів.
+            <div class="grey-block"
+                 style="display: flex; flex-direction: column; justify-content: center; height: 100%;">
+                <!-- Центрування контенту -->
+                <h2 class="heading" style="text-align: center; margin-bottom:10px; margin-right: 40px;">Інші
+                    практики</h2> <!-- Зміни стилі для відступів -->
+                <p class="text_medi">Наша студія невпинно розвивається, тому у нашому просторі часто з'являються нові
+                    напрямки та практики.
+                    Окрім різноманітних занять з йоги ви також можете спробувати більш духовні практики, такі як
+                    медитація, саундхілінг чи цвяхостояння.
+                    Ми проводимо як групові,<br>так й індивідуальні заняття.
+                    Аби дізнатись більш детальну інформацію та слідкувати за всіма оновленнями запрошуємо вас до нащого
+                    інстаграму <a href="https://www.instagram.com/tilo.irpin?igsh=NHlrNG95Ym9wazN5" target="_blank"
+                                  rel="noopener noreferrer" class="link"
+                                  style="text-decoration: underline; color: inherit;">tilo.irpin</a>
                 </p>
             </div>
         </div>
     </div>
 </div>
 
-<div class="container-fluid mt-7">
+<div class="container-fluid mt-7"> <!-- Footer -->
     <div class="row">
         <div class="col-md-6 p-0">
             <div class="footer">
-                <p class="text" style="text-align: left; margin-left: 60px; margin-top: 50px;">Чекаємо саме на
-                    тебе!</p>
+                <p class="text" style="text-align: left; margin-left: 60px;">Чекаємо саме на тебе!</p>
             </div>
         </div>
         <div class="col-md-6 p-0">
-            <div class="footer"
-                 style="text-align: right; display: flex; align-items: center; justify-content: flex-end;">
-                <img src="inst logo.png" alt="Instagram Logo"
-                     style="height: 30px; width: 30px; margin-right: 10px;">
+            <div class="footer" style="justify-content: flex-end;">
+                <img src="inst logo.png" alt="Instagram Logo" style="height: 30px; width: 30px; margin-right: 10px;">
                 <a href="https://www.instagram.com/tilo.irpin?igsh=NHlrNG95Ym9wazN5" target="_blank"
                    rel="noopener noreferrer" class="link" style="text-decoration: none; color: inherit;">tilo.irpin</a>
+                <!-- Зроблено посиланням -->
             </div>
         </div>
     </div>
