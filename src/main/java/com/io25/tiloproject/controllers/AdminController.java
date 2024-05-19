@@ -79,20 +79,9 @@ public class AdminController {
     @PostMapping("full_schedule/add")
     public String createFullSchedule() throws IOException {
         scheduleRecordService.saveNewScheduleRecord();
-        return "redirect:/admin/fullSchedule";
+        return "redirect:/admin/adminMain";
     }
 
-    @GetMapping("/fullSchedule")
-    public String showFullSchedule(Model model,
-                                   @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}") LocalDate trainingDate)  {
-        List<ScheduleRecord> scheduleRecords = scheduleRecordService.findAllRecordsByDate(trainingDate);
-        model.addAttribute("scheduleRecords", scheduleRecords);
-        List<YogaService> services = yogaServiceService.getAllServices();
-        Map<Long, List<YogaService>> allServices = services.stream().collect(Collectors.groupingBy(YogaService::getId));
-        model.addAttribute("services", allServices);
-        model.addAttribute("currentDay", trainingDate);
-        return "/admin/fullSchedule";
-    }
 
     @GetMapping("/adminMain")
     public String adminMain(Model model,

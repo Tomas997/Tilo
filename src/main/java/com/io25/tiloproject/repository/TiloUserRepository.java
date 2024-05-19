@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface TiloUserRepository extends JpaRepository<TiloUser, Long> {
 
     Optional<TiloUser> findTiloUserByUsername(String userName);
+    Optional<TiloUser> findTiloUserById(Long id);
 
 }

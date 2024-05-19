@@ -1,15 +1,15 @@
 package com.io25.tiloproject.controllers;
 
+import com.io25.tiloproject.config.TiloUserDetails;
 import com.io25.tiloproject.model.Role;
 import com.io25.tiloproject.model.ScheduleRecord;
 import com.io25.tiloproject.model.TiloUser;
 import com.io25.tiloproject.model.YogaService;
 import com.io25.tiloproject.repository.TiloUserRepository;
-import com.io25.tiloproject.services.CoachService;
-import com.io25.tiloproject.services.ScheduleRecordService;
-import com.io25.tiloproject.services.YogaServiceService;
+import com.io25.tiloproject.services.*;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +33,8 @@ public class UserController {
     CoachService coachService;
     YogaServiceService yogaServiceService;
     ScheduleRecordService scheduleRecordService;
+    ScheduleItemService scheduleItemService;
+    TiloUsersDetailsService tiloUsersDetailsService;
 
     @GetMapping("/orders")
     public String getOrders(Model model,
@@ -45,6 +47,10 @@ public class UserController {
         model.addAttribute("services", allServices);
         model.addAttribute("currentDay",trainingDate);
         return "user/User_Main";
+    }
+    @GetMapping("User_Order.html")
+    public String order(){
+        return "user/User_Order";
     }
 
     @PostMapping("add/user")
@@ -60,8 +66,15 @@ public class UserController {
         userRepository.save(tiloUser);
         return "redirect:/cabinet.html";
     }
-//    private void loadServices(Model model) {
-//        List<Coach> coach = coachRepository.findAll();
-//            model.addAttribute("coachScheduleRecords", coach);
-//    }
+
+    @PostMapping("/sign_up_item")
+    public String signUp(@RequestParam Long scheduleItemId, Authentication authentication){
+        if (authentication==null){
+            return "redirect:/cabinet.html";
+        }
+        Long id = ((TiloUserDetails) authentication.getPrincipal()).getUserId();
+        scheduleItemService.bookScheduleItem(id,scheduleItemId);
+        return "redirect:/user/orders";
+    }
+
 }
