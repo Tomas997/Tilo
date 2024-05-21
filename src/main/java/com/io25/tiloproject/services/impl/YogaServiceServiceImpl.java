@@ -44,6 +44,9 @@ public class YogaServiceServiceImpl implements YogaServiceService {
         imageService.saveImage(getServiceImageName(service),yogaServiceDTO.getImg().getBytes());
         return service;
     }
+
+
+
     private String getServiceImageName(YogaService service){
         String fileName = service.getImgName();
         String extension = fileName.substring(fileName.lastIndexOf('.'));

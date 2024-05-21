@@ -2,12 +2,13 @@ package com.io25.tiloproject.controllers;
 
 import com.io25.tiloproject.dto.ScheduleWeekRecordDTO;
 import com.io25.tiloproject.model.ScheduleWeekRecord;
-import com.io25.tiloproject.services.ScheduleRecordService;
+import com.io25.tiloproject.repository.ScheduleItemRepository;
 import com.io25.tiloproject.services.ScheduleWeekItemService;
 import com.io25.tiloproject.services.ScheduleWeekRecordService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,30 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @AllArgsConstructor
 public class ScheduleController {
-//    private ScheduleRecordRepository scheduleRecordRepository;
-//    private ScheduleRecordService scheduleRecordService;
+
     private ScheduleWeekRecordService scheduleWeekRecordService;
     private ScheduleWeekItemService scheduleWeekItemService;
+    private ScheduleItemRepository scheduleItemRepository;
 
-//    @PostMapping
-//    public String handleFormUpload(@Valid ScheduleRecordDTO scheduleRecordDTO, BindingResult bindingResult) {
-//        try {
-//            scheduleRecordService.saveNewScheduleRecord(scheduleRecordDTO);
-//        } catch (Exception ignored){
-//
-//        }
-//        return "redirect:/schedule";
-//    }
-//    @PostMapping("/schedule/add")
-//    public String handleFormUpload(@RequestBody ScheduleWeekRecordDTO txt) {
-//        try {
-//            System.out.println(txt);
-//        } catch (Exception ignored){
-//
-//        }
-//        return "redirect:/schedule";
-//    }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/schedule/add")
     public String handleFormUpload(@Valid @RequestBody ScheduleWeekRecordDTO scheduleWeekRecordDTO, BindingResult bindingResult) {
         try {
@@ -54,4 +38,6 @@ public class ScheduleController {
         }
         return "/admin/createSchedule?day="+scheduleWeekRecordDTO.getDay()+"&coach="+scheduleWeekRecordDTO.getCoach();
     }
+
+
 }

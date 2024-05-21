@@ -1,20 +1,22 @@
 package com.io25.tiloproject.controllers;
 
 import com.io25.tiloproject.dto.YogaServiceDTO;
-import com.io25.tiloproject.model.YogaService;
 import com.io25.tiloproject.services.YogaServiceService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 
 @Controller
 @RequestMapping("/services")
@@ -26,8 +28,9 @@ public class ServiceController {
 
     private final YogaServiceService yogaServiceService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("{id}/delete")
-    public String deleteById(@PathVariable String id, HttpServletRequest request) {
+    public String deleteById(@PathVariable String id, HttpServletRequest request) throws IOException {
         yogaServiceService.deleteById(Long.parseLong(id));
         try {
             URL referer = new URL(request.getHeader("referer"));
@@ -37,6 +40,7 @@ public class ServiceController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public String handleFormUpload(@Valid YogaServiceDTO yogaServiceDTO, BindingResult bindingResult) {
         try {
@@ -44,19 +48,12 @@ public class ServiceController {
         } catch (Exception ignored){
 
         }
-        return "redirect:/services";
-    }
-
-    @GetMapping
-    public String upload(Model model) {
-        loadServices(model);
-        return "services/upload";
+        return "redirect:/admin/services";
     }
 
 
-    private void loadServices(Model model) {
-        List<YogaService> allServices = yogaServiceService.getAllServices();
-        model.addAttribute(SERVICES_ATTRIBUTE_NAME, allServices);
-    }
+
+
+
 
 }

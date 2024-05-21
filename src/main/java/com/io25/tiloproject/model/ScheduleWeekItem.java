@@ -7,6 +7,8 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalTime;
+
 @Entity
 @Getter
 @Setter
@@ -15,7 +17,7 @@ public class ScheduleWeekItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String time;
+    private LocalTime time;
     private Long service;
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)

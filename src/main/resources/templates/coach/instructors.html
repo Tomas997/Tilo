@@ -131,7 +131,7 @@
         <div th:each="coach, iterStat : ${coaches}" class="col-md-4">
           <div class="text-center" style="margin-top: 30px; margin-bottom: 30px">
             <!-- Фото, заголовок та текст у одній комірці -->
-            <img src="photo1.jpg" th:src="@{'/src/img/'+${coach.imgName}}" class="rounded-circle" alt="Фото" style="width: 150px; height: 150px;">
+            <img src="/img/photo1.jpg" th:src="@{'/src/img/'+${coach.imgName}}" class="rounded-circle" alt="Фото" style="width: 150px; height: 150px;">
             <p class="fw-bold" th:text="${coach.getFullName()}">Тренер</p>
             <p class="text_about" th:utext="${coach.getInfo()}">Текст про тренера</p>
           </div>
@@ -149,7 +149,7 @@
       </div>
       <div class="col-md-6 p-0">
         <div class="footer" style="text-align: right; display: flex; align-items: center; justify-content: flex-end;">
-          <img src="inst logo.png" alt="Instagram Logo" style="height: 30px; width: 30px; margin-right: 10px;"> <!-- Видалено vertical-align -->
+          <img src="/img/inst logo.png" alt="Instagram Logo" style="height: 30px; width: 30px; margin-right: 10px;"> <!-- Видалено vertical-align -->
           <a href="https://www.instagram.com/tilo.irpin?igsh=NHlrNG95Ym9wazN5" target="_blank" rel="noopener noreferrer" class="link" style="text-decoration: none; color: inherit;">tilo.irpin</a> <!-- Зроблено посиланням -->
         </div>
       </div>

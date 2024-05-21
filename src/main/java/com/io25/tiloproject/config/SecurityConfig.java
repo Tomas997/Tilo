@@ -59,8 +59,12 @@ public class SecurityConfig {
                         auth ->
                                 auth
                                         //.anyRequest().authenticated()
-                                        //.requestMatchers("/secured/**").authenticated()
+//                                        .requestMatchers("/admin/**").authenticated()
+//                                        .requestMatchers("/user/**").authenticated()
+//                                        .requestMatchers("/coach/instructors.html").permitAll()
+//                                        .requestMatchers("/coach/**").authenticated()
                                         .requestMatchers("/**").permitAll()
+
                 )
                 .sessionManagement(
                         session ->

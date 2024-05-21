@@ -5,11 +5,12 @@ import com.io25.tiloproject.model.Coach;
 import com.io25.tiloproject.model.ScheduleRecord;
 import com.io25.tiloproject.model.ScheduleWeekRecord;
 import com.io25.tiloproject.model.YogaService;
-import com.io25.tiloproject.repository.ScheduleRecordRepository;
+import com.io25.tiloproject.repository.ScheduleItemRepository;
 import com.io25.tiloproject.services.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/admin")
 @Slf4j
 @AllArgsConstructor
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminController {
     private static final String SERVICES_ATTRIBUTE_NAME = "coaches";
     private CoachService coachService;
@@ -32,7 +34,7 @@ public class AdminController {
     private ScheduleWeekRecordService scheduleWeekRecordService;
     private ScheduleWeekItemService scheduleWeekItemService;
     private ScheduleRecordService scheduleRecordService;
-    private ScheduleRecordRepository scheduleRecordRepository;
+    private ScheduleItemRepository scheduleItemRepository;
 
     @PostMapping()
     public String handleFormUpload(@Valid CoachDTO coachDTO, BindingResult bindingResult) {
@@ -82,7 +84,7 @@ public class AdminController {
         return "redirect:/admin/adminMain";
     }
 
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/adminMain")
     public String adminMain(Model model,
                             @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}") LocalDate trainingDate) {
@@ -95,5 +97,19 @@ public class AdminController {
         return "/admin/Admin_Main";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/service/del/{id}")
+    public String handleFormUpload(@PathVariable Long id) {
+        scheduleItemRepository.deleteById(id);
+        return "redirect:/admin/adminMain";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/services")
+    public String upload(Model model) {
+        List<YogaService> allServices = yogaServiceService.getAllServices();
+        model.addAttribute("services", allServices);
+        return "services/upload";
+    }
 
 }

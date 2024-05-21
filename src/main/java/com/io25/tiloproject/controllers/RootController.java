@@ -53,6 +53,7 @@ public class RootController {
         return "redirect:" + Role.valueOf(((SimpleGrantedAuthority) authentication.getAuthorities().toArray()[0]).getAuthority()).getHomePage();
     }
 
+
     @PostMapping("home")
     public String postHome(Authentication authentication) {
         return handleHome(authentication);

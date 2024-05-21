@@ -6,6 +6,7 @@ import com.io25.tiloproject.repository.CoachRepository;
 import com.io25.tiloproject.services.CoachService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,17 +27,20 @@ public class CoachController {
     private CoachRepository repository;
     private CoachService coachService;
 
+    @PreAuthorize("hasRole('ROLE_COACH')")
     @GetMapping("/{id}")
     public String getCoach(@PathVariable Long id, Model model) {
         loadServices(model, id);
         return "coach/Coach_Main";
     }
 
+    @PreAuthorize("hasRole('ROLE_COACH')")
     @GetMapping("")
     public String redirectCoachHome(Authentication authentication) {
         return "redirect:coach/" + ((TiloUserDetails) authentication.getPrincipal()).getUserId();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}/delete")
     public String deleteById(@PathVariable String id, HttpServletRequest request) {
         coachService.deleteById(Long.parseLong(id));

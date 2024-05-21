@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Фільтр таблиці</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         table {
             border-collapse: collapse;
@@ -34,6 +36,7 @@
             font-family: 'Lato', sans-serif;
             font-size: 24px; /* Збільшено розмір заголовків */
             font-weight: bold; /* Збільшено жирність заголовків */
+            margin-top: 20px;
         }
 
         input[type="button"] {
@@ -92,10 +95,54 @@
             padding-right: 10px;
         }
 
+        .navbar {
+            background-color: #DDE1E4; /* Колір фону для меню */
+        }
+
+        .navbar-nav .nav-link:hover {
+            font-weight: bold; /* Зробити текст жирним при наведенні */
+        }
     </style>
 </head>
 <body>
-<button class="back-btn" onclick="window.location.href='Admin_CreateSchedule.html'">Назад</button>
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+        <a class="navbar-brand" href="/#homeindex.html">tilo</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/index.html#home">Головна</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/index.html#about-us-section">Про нас</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/index.html#place">Адреса</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/services.html">Напрямки</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/instructors.html">Тренери</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/prices.html">Ціни</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/cabinet.html">Кабінет</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<button class="back-btn" onclick="window.location.href='/admin/createSchedule'">Створити розклад</button>
+<button class="back-btn" onclick="window.location.href='/admin/uploadCoach'">Зареєструвати тренера</button>
+<button class="back-btn" onclick="window.location.href='/admin/services'">Додати послугу</button>
 <h2>Інформація</h2>
 
 <form id="myForm">
@@ -130,8 +177,9 @@
             <td th:text="${item.getTime()}">09:00</td>
             <td th:text="${services.get(item.getService()).getFirst().getName()}"></td>
             <td th:text="${item.getQuantity()}"></td>
-<!--            <td><input type="button" value="Скасувати" th:onclick="'showPopup('+${schedStat}+', \'ПІБ2\')'"/></td>-->
-            <td><input type="button" value="Скасувати" th:onclick="'showPopup(\''  + ${item.getService()} +  '\', \'ПІБ2\');'"/></td>
+            <!--            <td><input type="button" value="Скасувати" th:onclick="'showPopup('+${schedStat}+', \'ПІБ2\')'"/></td>-->
+            <!--            <td><input type="button" value="Скасувати" th:onclick="'showPopup(\''  + ${item.getId()} +  '\', \'ПІБ2\');'"/></td>-->
+            <td><input type="button" value="Скасувати" th:onclick="'showPopup(\''  + ${item.getId()} +'\');'"/></td>
         </tr>
         </tbody>
     </table>
@@ -153,34 +201,62 @@
         popup.style.display = 'none';
     }
 
-    // Функція для показу pop-up вікна
-    function showPopup(index, name) {
+    function showPopup(index) {
         var popup = document.getElementById('popup');
-        popup.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2>Список клієнтів</h2>
-            <a href="#" onclick="closePopup()">Закрити</a>
-        </div>
-        <!-- Таблиця для виведення ПІБ та телефону кожного клієнта -->
-        <table style="width: 100%; border-collapse: collapse;">
-            <tr>
-                <th style="text-align: left; padding-right: 10px;">ПІБ</th>
-                <th style="text-align: left;">Телефон</th>
-            </tr>
-            <tr>
-                <td>${name}1</td>
-                <td>тел.1</td>
-            </tr>
-            <tr>
-                <td>${name}2</td>
-                <td>тел.2</td>
-            </tr>
-            <tr>
-                <td>${name}3</td>
-                <td>тел.3</td>
-            </tr>
-        </table>`;
-        popup.style.display = 'block';
+
+        getUsers(index)
+            .then(users => {
+                var usersHtml = users.map(user => `
+                <tr>
+                    <td>${user.fullName}</td>
+                    <td>${user.phone}</td>
+                </tr>
+            `).join('');
+
+                popup.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>Список клієнтів</h2>
+                    <a href="#" onclick="closePopup()">Закрити</a>
+                </div>
+                <!-- Таблиця для виведення ПІБ та телефону кожного клієнта -->
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <th style="text-align: left; padding-right: 10px;">ПІБ</th>
+                        <th style="text-align: left;">Телефон</th>
+                    </tr>
+                    ${usersHtml}
+                </table>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div>Ви дісно хочете скасувати заняття?</div>
+                    <form id="cancelForm" action="/admin/service/del/${index}" method="post" style="display: inline;">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="submit" class="btn btn-danger mt-1">Так</button>
+                    </form>
+                </div>
+            `;
+                popup.style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error fetching users:', error);
+            });
+    }
+
+
+    function getUsers(index) {
+        return fetch(`/user_api/get/${index}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Assuming data is an array of users
+                return data;
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
     }
 </script>
 </body>

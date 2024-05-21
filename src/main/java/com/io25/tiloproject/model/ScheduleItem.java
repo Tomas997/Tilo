@@ -7,10 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-
-import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -23,7 +20,7 @@ public class ScheduleItem {
     @EqualsAndHashCode.Include
     private Long id;
 
-    private String time;
+    private LocalTime time;
     private Long service;
 
     @ManyToOne

@@ -8,10 +8,6 @@ import com.io25.tiloproject.services.ScheduleItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-
 @Service
 @AllArgsConstructor
 public class ScheduleItemServiceImpl implements ScheduleItemService {
@@ -42,9 +38,6 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
         if (!user.getScheduleItems().contains(scheduleItem)) {
             return;
         }
-
-
-
         scheduleItem.setQuantity(scheduleItem.getQuantity() - 1);
         user.getScheduleItems().remove(scheduleItem);
         scheduleItemRepository.save(scheduleItem);
