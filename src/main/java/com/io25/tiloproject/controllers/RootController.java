@@ -31,7 +31,15 @@ public class RootController {
         loadServices(model);
         return "services/services";
     }
+    @GetMapping("/")
+    public String getRoot(){
+        return "/index";
+    }
 
+    @GetMapping("/index.html")
+    public String getIndex(){
+        return "/index";
+    }
     @GetMapping("/cabinet.html")
     public String getCabinet(Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()) {

@@ -11,10 +11,10 @@ import java.util.Objects;
 @Setter
 @ToString
 @Entity
-@Builder
 @Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
 public class TiloUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,5 +47,6 @@ public class TiloUser {
         return getClass().hashCode();
     }
 }
+
 
 

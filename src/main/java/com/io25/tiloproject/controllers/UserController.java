@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -60,8 +61,7 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("User_Order.html")
     public String order(Authentication authentication, Model model,
-                        @RequestParam(defaultValue = "1") Integer t1,
-                        @RequestParam(defaultValue = "1") Integer t2) {
+                        @RequestParam(defaultValue = "1") Integer t1) {
 
         Long userId = ((TiloUserDetails) authentication.getPrincipal()).getUserId();
 
@@ -75,7 +75,6 @@ public class UserController {
         model.addAttribute("services", allServices);
 
         model.addAttribute("t1", t1);
-        model.addAttribute("t2", t2);
 
         return "user/User_Order";
     }
@@ -84,13 +83,13 @@ public class UserController {
     @PostMapping("add/user")
     public String addUser(@RequestParam String name, @RequestParam String phone, @RequestParam String username,
                           @RequestParam String password) {
-        TiloUser tiloUser = TiloUser.builder()
-                .fullName(name)
-                .phone(phone)
-                .username(username)
-                .password(passwordEncoder.encode(password))
-                .role(Role.ROLE_USER)
-                .build();
+        TiloUser tiloUser = new TiloUser(null,name,phone,username,passwordEncoder.encode(password),Role.ROLE_USER,new ArrayList<>());
+//                .fullName(name)
+//                .phone(phone)
+//                .username(username)
+//                .password(passwordEncoder.encode(password))
+//                .role(Role.ROLE_USER)
+//                .build();
         userRepository.save(tiloUser);
         return "redirect:/cabinet.html";
     }

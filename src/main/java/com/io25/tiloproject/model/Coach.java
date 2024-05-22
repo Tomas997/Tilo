@@ -8,24 +8,18 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode
-public class Coach {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(length = 70)
-    private String fullName;
-
-    @Column(length = 20)
-    private String phoneNumber;
-
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class Coach extends TiloUser {
     @Column(length = 450)
     private String info;
+
     @Column(length = 20)
     private String imgName;
+
     @OneToMany(fetch = FetchType.EAGER)
     private List<ScheduleRecord> scheduleRecords;
-
-
 }
+

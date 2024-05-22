@@ -1,11 +1,15 @@
 package com.io25.tiloproject.dto;
 
 import com.io25.tiloproject.annotations.validator.ValidMultipartFile;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
-@Data
+@Getter
+@Setter
 public class CoachDTO {
 
     @NotBlank
@@ -14,6 +18,10 @@ public class CoachDTO {
     private String phoneNumber;
     @NotBlank
     private String info;
+    @Column(unique = true)
+    private String username;
+
+    private String password;
 
 
     //custom annotation

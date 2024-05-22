@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -141,12 +141,16 @@
         <li class="nav-item">
           <a class="nav-link" href="/cabinet.html">Кабінет</a>
         </li>
+        <div sec:authorize="isAuthenticated()">
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Вийти</a>
+          </li>
+        </div>
       </ul>
     </div>
   </div>
 </nav>
 
-<button class="back-btn" onclick="window.location.href='/admin/adminMain' ">Розклад тренерів</button>
 
 <div id="clasess" class="container" th:each="service, iterStat : ${services}">
   <!-- Перша колонка (текст) -->

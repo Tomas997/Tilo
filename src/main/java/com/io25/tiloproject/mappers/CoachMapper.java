@@ -13,11 +13,16 @@ import org.springframework.web.multipart.MultipartFile;
 public interface CoachMapper {
     CoachMapper INSTANCE = Mappers.getMapper(CoachMapper.class);
 
-    //    @Mapping(target = "name", source = "name", qualifiedByName = "toUpperCase")
-    @Mapping(target = "imgName", source = "img")
+    @Mapping(target = "imgName", expression = "java(convertToImgName(dto.getImg()))")
+    @Mapping(target = "phone", source = "phoneNumber")
+    @Mapping(target = "password", source = "password")
+    @Mapping(target = "username", source = "username")
+
     Coach dtoToEntity(CoachDTO dto);
 
     default String convertToImgName(MultipartFile img) {
         return (img != null) ? img.getOriginalFilename() : null;
     }
 }
+
+
