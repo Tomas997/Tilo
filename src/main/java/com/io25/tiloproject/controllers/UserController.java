@@ -1,11 +1,15 @@
 package com.io25.tiloproject.controllers;
 
 import com.io25.tiloproject.config.TiloUserDetails;
+import com.io25.tiloproject.dto.ScheduleItemDTO;
 import com.io25.tiloproject.model.*;
+import com.io25.tiloproject.repository.ScheduleItemRepository;
 import com.io25.tiloproject.repository.TiloUserRepository;
 import com.io25.tiloproject.services.*;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,9 +34,10 @@ import java.util.stream.Collectors;
 @Controller
 @AllArgsConstructor
 public class UserController {
-    @Autowired
+    private static final int PAGE_SIZE = 1;
     PasswordEncoder passwordEncoder;
     TiloUserRepository userRepository;
+    ScheduleItemRepository scheduleItemRepository;
     CoachService coachService;
     YogaServiceService yogaServiceService;
     ScheduleRecordService scheduleRecordService;
@@ -61,20 +66,17 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("User_Order.html")
     public String order(Authentication authentication, Model model,
-                        @RequestParam(defaultValue = "1") Integer t1) {
+                        @RequestParam(defaultValue = "0") Integer page) {
 
         Long userId = ((TiloUserDetails) authentication.getPrincipal()).getUserId();
 
-        TiloUser user = userRepository.findTiloUserById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Page<ScheduleItemDTO> allItemsWithUserId = scheduleItemRepository.getAllItemsWithUserId(userId, PageRequest.of(page, PAGE_SIZE));
 
-        List<ScheduleItem> scheduleItems = user.getScheduleItems();
-        model.addAttribute("scheduleItems", scheduleItems);
+        model.addAttribute("page", allItemsWithUserId);
 
         List<YogaService> services = yogaServiceService.getAllServices();
         Map<Long, List<YogaService>> allServices = services.stream().collect(Collectors.groupingBy(YogaService::getId));
         model.addAttribute("services", allServices);
-
-        model.addAttribute("t1", t1);
 
         return "user/User_Order";
     }

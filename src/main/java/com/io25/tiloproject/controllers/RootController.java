@@ -40,6 +40,7 @@ public class RootController {
     public String getIndex(){
         return "/index";
     }
+
     @GetMapping("/cabinet.html")
     public String getCabinet(Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()) {

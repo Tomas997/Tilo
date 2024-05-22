@@ -15,5 +15,5 @@ public interface CoachService {
     Coach saveNewCoach(CoachDTO coachDTO) throws IOException;
     Optional<Coach> findFirstCoach();
 
-    Optional<Coach> findById(long id);
+    Optional<Coach> findById(Long id);
 }

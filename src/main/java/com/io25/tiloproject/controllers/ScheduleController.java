@@ -32,7 +32,6 @@ public class ScheduleController {
         try {
             ScheduleWeekRecord scheduleWeekRecord = scheduleWeekRecordService.saveNewScheduleWeekRecord(scheduleWeekRecordDTO);
             scheduleWeekItemService.saveScheduleItems(scheduleWeekRecordDTO.getItems(),scheduleWeekRecord);
-
         } catch (Exception ignored) {
             System.out.println(ignored);
         }
