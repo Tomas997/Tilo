@@ -99,6 +99,44 @@
         .navbar-nav .nav-link:hover {
             font-weight: bold; /* Зробити текст жирним при наведенні */
         }
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+        }
+
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination li a {
+            display: block;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #007bff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s;
+        }
+
+        .pagination li a:hover {
+            background-color: #ddd;
+        }
+
+        .pagination li.active a {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .pagination li.disabled a {
+            color: #ccc;
+            background-color: #f9f9f9;
+            border-color: #ddd;
+            pointer-events: none;
+        }
+
     </style>
 </head>
 <body>
@@ -153,7 +191,7 @@
 </select>
 
 
-<!--<div th:each="record, iterStat : ${scheduleItems}">-->
+
     <table>
         <thead>
         <tr>
@@ -166,31 +204,41 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="record, iterStat : ${scheduleItems}">
+        <tr th:each="record, iterStat : ${page.toList()}">
             <td th:text="${iterStat.count}"></td>
-            <td th:text="${record.getScheduleRecord().getDate()}"></td>
-            <td th:text="${record.time}"></td>
+            <td th:text="${record.getDate()}"></td>
+            <td th:text="${record.getTime()}"></td>
             <td th:text="${services.get(record.getService()).getFirst().getName()}"></td>
-            <td th:text="${record.getScheduleRecord().getCoach().getFullName()}"></td>
-            <td th:text="${T(java.time.LocalDateTime).of(record.scheduleRecord.date, record.time).isBefore(T(java.time.LocalDateTime).now()) ? 'Тренування проведено' : 'Тренування заплановано'}"></td>
+            <td th:text="${record.getCoachName()}"></td>
+            <td th:text="${T(java.time.LocalDateTime).of(record.getDate(), record.getTime()).isBefore(T(java.time.LocalDateTime).now()) ? 'Тренування проведено' : 'Тренування заплановано'}"></td>
         </tr>
         </tbody>
     </table>
-<!--</div>-->
+
 
 <br>
-<!--Cторінка: <a href='#'>1</a>&nbsp<a href='#'>2</a>&nbsp<a href='#'>3</a>&nbsp...&nbsp<a href='#'>30</a>-->
 
-<!--<th:block th:if="${${t1} le 4}">-->
-<!--    <p>Немає записів.</p>-->
-<!--</th:block>-->
 
-<th:block th:each="i : ${#numbers.sequence(1, 5)}">
-    <a
-            th:text="${t1}+${i}-3"
-            th:href="'User_Order.html?t1='+(${t1}+${i}-3)"
-    ></a>&nbsp;
-</th:block>
 
+
+<div>
+    <span th:text="'Сторінка ' + ${page.number + 1} + ' з ' + ${page.totalPages}"></span>
+</div>
+
+<div>
+    <ul class="pagination">
+        <li th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
+            <a th:href="@{/user/User_Order.html(page=${page.number - 1})}">Попередня</a>
+        </li>
+        <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+            th:classappend="${i == page.number} ? 'active'">
+            <a th:href="@{/user/User_Order.html(page=${i})}"
+               th:text="${i + 1}"></a>
+        </li>
+        <li th:classappend="${page.hasNext()} ? '' : 'disabled'">
+            <a th:href="@{/user/User_Order.html(page=${page.number + 1})}">Наступна</a>
+        </li>
+    </ul>
+</div>
 </body>
 </html>

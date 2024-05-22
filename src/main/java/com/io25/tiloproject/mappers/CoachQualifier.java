@@ -6,6 +6,8 @@ import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class CoachQualifier {
     private final CoachService coachService;
@@ -17,6 +19,14 @@ public class CoachQualifier {
 
     @Named("stringToCoach")
     public Coach stringToCoach(String coachId) {
-        return coachService.findById(Long.parseLong(coachId)).get();
+        Optional<Coach> byId = coachService.findById(Long.parseLong(coachId));
+        byId.ifPresent(
+                System.out::println
+        );
+        byId.ifPresentOrElse(
+                System.out::println,
+                ()-> System.out.println("OOPS"+coachId)
+        );
+        return byId.get();
     }
 }

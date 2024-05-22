@@ -160,7 +160,7 @@
 
     <select id="coach" name="coach">
         <option th:each="coachObj, iterStat : ${coaches}"
-                th:value="${iterStat.index + 1}"
+                th:value="${coachObj.getId()}"
                 th:text="${coachObj.fullName}"
                 th:selected="${coachObj.getId() == coachSelected}"></option>
     </select>

@@ -60,7 +60,7 @@ public class CoachServiceImpl implements CoachService {
     }
 
     @Override
-    public Optional<Coach> findById(long id) {
+    public Optional<Coach> findById(Long id) {
         return coachRepository.findById(id);
     }
 

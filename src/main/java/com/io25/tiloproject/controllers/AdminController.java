@@ -41,7 +41,6 @@ public class AdminController {
         try {
             coachService.saveNewCoach(coachDTO);
         } catch (Exception ignored) {
-            System.out.println(ignored);
         }
         return "redirect:/admin/uploadCoach";
     }
