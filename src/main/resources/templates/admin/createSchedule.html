@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="uk"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фільтр таблиці</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+    table {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        border-collapse: collapse;
+        width: 100%;
+        border: 2px solid #D2B48C; /* Додано границю кольору #D2B48C */
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-family: 'Lato', sans-serif;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    td {
+        font-family: 'Leelawadee UI', sans-serif;
+        font-size: 14px;
+    }
+
+    h2 {
+        font-family: 'Lato', sans-serif;
+        font-size: 24px; /* Збільшено розмір заголовків */
+        font-weight: bold; /* Збільшено жирність заголовків */
+        margin-top: 20px;
+        margin-left: 10px;
+    }
+
+
+    .rozklad-btn {
+        background-color: #D2B48C;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px; /* Заокруглені краї кнопки */
+        float: right; /* Вирівнювання кнопки праворуч */
+        margin-top: 20px;
+    }
+
+    .rozklad-btn:hover {
+        background-color: #CDA774;
+    }
+
+    .delete-btn {
+        background-color: white; /* Білий фон */
+        border: 2px solid #D2B48C; /* Жовта обводка */
+        color: #333; /* Колір тексту */
+        padding: 6px 10px; /* Відступи */
+        cursor: pointer; /* Вказівник при наведенні */
+        border-radius: 5px; /* Заокруглені краї кнопки */
+    }
+
+    .delete-btn:hover {
+        background-color: #ddd; /* Колір фону при наведенні */
+    }
+
+    .button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.button-container button, .button-container form {
+    flex: none;
+}
+
+.button-container form {
+    margin: 0;
+}
+
+.navbar {
+  background-color: #DDE1E4; /* Колір фону для меню */
+}
+.navbar-nav .nav-link:hover {
+  font-weight: bold; /* Зробити текст жирним при наведенні */
+}
+</style>
+
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+      <a class="navbar-brand" href="/#homeindex.html">tilo</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/index.html#home">Головна</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/index.html#about-us-section">Про нас</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/index.html#place">Адреса</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/services.html">Напрямки</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/instructors.html">Тренери</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/prices.html">Ціни</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/cabinet.html">Кабінет</a>
+          </li>
+            <div sec:authorize="isAuthenticated()">
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Вийти</a>
+                </li>
+            </div>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <button class="rozklad-btn" onclick="window.location.href='/admin/adminMain' ">Розклад тренерів</button>
+  <h2>Створити розклад</h2>
+
+<p style="margin-bottom:10px; margin-left: 10px;">День тижня</p>
+
+<form action="/admin/createSchedule" method="get" id="loadForm">
+    <select id="day" name="day">
+        <option value="1" th:selected="${weekDay==1}">Понеділок</option>
+        <option value="2" th:selected="${weekDay==2}">Вівторок</option>
+        <option value="3" th:selected="${weekDay==3}">Середа</option>
+        <option value="4" th:selected="${weekDay==4}">Четвер</option>
+        <option value="5" th:selected="${weekDay==5}">П'ятниця</option>
+        <option value="6" th:selected="${weekDay==6}">Субота</option>
+        <option value="7" th:selected="${weekDay==7}">Неділя</option>
+    </select>
+
+    Тренер
+
+    <select id="coach" name="coach">
+        <option th:each="coachObj, iterStat : ${coaches}"
+                th:value="${coachObj.getId()}"
+                th:text="${coachObj.fullName}"
+                th:selected="${coachObj.getId() == coachSelected}"></option>
+    </select>
+
+
+    <button id="loadButton" type="submit">Показати</button>
+</form>
+
+<table id="table1">
+    <thead>
+    <tr>
+        <th>Рядок</th>
+        <th>Час відвідування</th>
+        <th>Назва</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="scheduleWeekItem, iterStat : ${scheduleWeekRecord?.schedule}">
+        <td th:text="${iterStat.index + 1}"></td>
+        <td><input type="time" th:value="${scheduleWeekItem.time}" name="time"/></td>
+        <td>
+            <select name="service">
+                <option th:each="service, iterStat : ${services}"
+                        th:value="${iterStat.count}"
+                        th:text="${service.name}"
+                        th:selected="${scheduleWeekItem.service == service.id}"></option>
+            </select>
+        </td>
+        <td>
+            <form th:action="${'/admin/schedule/delete?id='+scheduleWeekItem.getId()+'&day='+weekDay+'&coach='+coachSelected}" th:method="delete">
+                <button type="submit" class="delete-btn" onclick="deleteRow(this)" th:href="@{'/admin/schedule/delete?id='+scheduleWeekItem.id}">Видалити</button>
+            </form>
+        </td>
+    </tr>
+
+    </tbody>
+</table>
+
+<!-- Контейнер для кнопок -->
+    <div class="button-container">
+        <button id="addRow1">Додати</button>
+
+        <form action="/admin/schedule/add" method="post" id="saveForm">
+            <button id="saveAll" type="submit">Зберегти</button>
+        </form>
+
+        <form action="/admin/full_schedule/add" method="post">
+            <button id="createSchedule" type="submit">Створити розклад</button>
+        </form>
+    </div>
+
+<script th:inline="javascript">
+    var services =/*[[${services}]]*/ null;
+    var tables = document.querySelectorAll('table');
+    tables.forEach(function (table, index) {
+        var addButton = document.getElementById("addRow" + (index + 1));
+
+        addButton.addEventListener("click", function () {
+            // Створення нового рядка
+            var newRow = document.createElement("tr");
+
+            // Створення комірок для нового рядка
+            var cell1 = document.createElement("td");
+            cell1.textContent = "";
+
+            var cell2 = document.createElement("td");
+            var input = document.createElement("input");
+            input.type = "time";
+            input.value = "09:00";
+            input.name = "time"
+            cell2.appendChild(input);
+
+            var cell3 = document.createElement("td");
+            var select1 = document.createElement("select");
+            select1.name = "service"
+
+            services.forEach(function(obj) {
+                var option = document.createElement("option");
+                option.value = obj.id;
+                option.text = obj.name;
+                select1.appendChild(option);
+            });
+
+            cell3.appendChild(select1);
+
+            var cell4 = document.createElement("td");
+
+            // Додавання комірок до нового рядка
+            newRow.appendChild(cell1);
+            newRow.appendChild(cell2);
+            newRow.appendChild(cell3);
+            newRow.appendChild(cell4);
+
+            // Додавання нового рядка до таблиці
+            document.getElementById("table" + (index + 1)).getElementsByTagName("tbody")[0].appendChild(newRow);
+
+        });
+    });
+
+
+    document.getElementById('saveForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        jsonObject = {
+            day: document.getElementById('day').value,
+            coach: document.getElementById('coach').value,
+            items: []
+        }
+
+        let trs = document.getElementById("table1").getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+        let trsArray = Array.from(trs);
+
+        trsArray.forEach(function (element) {
+            let item = {};
+            item.time = element.querySelector("[name='time']").value;
+            item.service = element.querySelector("[name='service']").value;
+            jsonObject.items.push(item);
+        });
+
+        let jsonData = JSON.stringify(jsonObject);
+
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+                console.log(this.responseText);
+                document.location=this.responseText;
+            }
+        };
+
+        xhr.open('POST', document.getElementById("saveForm").getAttribute("action"));
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(jsonData);
+    });
+
+</script>
+
+
+<script>
+function deleteRow(button) {
+    // Отримуємо батьківський рядок (в цьому випадку <form>)
+    var row = button.closest('tr'); // Припускаючи, що ваша кнопка знаходиться в рядку таблиці (<tr>)
+
+    // Видаляємо цей рядок
+    if (row) {
+        row.parentNode.removeChild(row);
+    }
+}
+</script>
+</body>
+</html>

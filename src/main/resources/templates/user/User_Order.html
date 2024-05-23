@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фільтр таблиці</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+        }
+
+        .navbar {
+            background-color: #DDE1E4;
+        }
+
+        .navbar-nav .nav-link:hover {
+            font-weight: bold;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 2px solid #D2B48C;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        input[type="button"] {
+            background-color: white;
+            border: 2px solid #D2B48C;
+            color: #333;
+            padding: 6px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        input[type="button"]:hover {
+            background-color: #ddd;
+        }
+
+        .back-btn {
+            background-color: #D2B48C;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            float: right;
+        }
+
+        .back-btn:hover {
+            background-color: #CDA774;
+        }
+
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+        }
+
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination li a {
+            display: block;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #007bff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s;
+        }
+
+        .pagination li a:hover {
+            background-color: #ddd;
+        }
+
+        .pagination li.active a {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .pagination li.disabled a {
+            color: #ccc;
+            background-color: #f9f9f9;
+            border-color: #ddd;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+        <a class="navbar-brand" href="/index.html">tilo</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/index.html#home">Головна</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/index.html#about-us-section">Про нас</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/index.html#place">Адреса</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/services.html">Напрямки</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/instructors.html">Тренери</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/prices.html">Ціни</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/cabinet.html">Кабінет</a>
+                </li>
+                <div sec:authorize="isAuthenticated()">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Вийти</a>
+                    </li>
+                </div>
+            </ul>
+        </div>
+    </div>
+</nav>
+<button class="back-btn" onclick="window.location.href='/user/orders'">Назад</button>
+<h2>Всі замовлення</h2>
+<label for="filter">Показати:</label>
+<select id="filter">
+    <option value="0">Всі</option>
+    <option value="1">Замовлено</option>
+    <option value="2">Скасовано</option>
+    <option value="3">Відбулось</option>
+</select>
+<table>
+    <thead>
+    <tr>
+        <th>Рядок</th>
+        <th>Дата відвідування</th>
+        <th>Час відвідування</th>
+        <th>Назва</th>
+        <th>Тренер</th>
+        <th>Статус</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="record, iterStat : ${page.toList()}">
+        <td th:text="${iterStat.count}"></td>
+        <td th:text="${record.getDate()}"></td>
+        <td th:text="${record.getTime()}"></td>
+        <td th:text="${services.get(record.getService()).getFirst().getName()}"></td>
+        <td th:text="${record.getCoachName()}"></td>
+        <td th:text="${T(java.time.LocalDateTime).of(record.getDate(), record.getTime()).isBefore(T(java.time.LocalDateTime).now()) ? 'Тренування проведено' : 'Тренування заплановано'}"></td>
+    </tr>
+    </tbody>
+</table>
+<br>
+
+<div th:if="${page.totalPages eq 0}">
+    <span th:text="'Сторінка 0 з 0 '"></span>
+</div>
+
+<div th:if="${page.totalPages gt 0}">
+    <span th:text="'Сторінка ' + ${page.number + 1} + ' з ' + ${page.totalPages}"></span>
+
+    <div>
+        <ul class="pagination">
+            <li th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
+                <a th:href="@{/user/User_Order.html(page=${page.number - 1})}">Попередня</a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+                th:classappend="${i == page.number} ? 'active'">
+                <a th:href="@{/user/User_Order.html(page=${i})}" th:text="${i + 1}"></a>
+            </li>
+            <li th:classappend="${page.hasNext()} ? '' : 'disabled'">
+                <a th:href="@{/user/User_Order.html(page=${page.number + 1})}">Наступна</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+</html>

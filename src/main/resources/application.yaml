@@ -43,3 +43,7 @@ spring:
       static-locations: classpath:/static/
       chain:
         cache: false
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true

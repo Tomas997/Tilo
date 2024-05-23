@@ -13,4 +13,5 @@ public interface YogaServiceService {
     void deleteById(Long id);
 
     YogaService saveNewService(YogaServiceDTO yogaServiceDTO) throws IOException;
+
 }

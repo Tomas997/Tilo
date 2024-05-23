@@ -59,8 +59,12 @@ public class SecurityConfig {
                         auth ->
                                 auth
                                         //.anyRequest().authenticated()
-                                        //.requestMatchers("/secured/**").authenticated()
+//                                        .requestMatchers("/admin/**").authenticated()
+//                                        .requestMatchers("/user/**").authenticated()
+//                                        .requestMatchers("/coach/instructors.html").permitAll()
+//                                        .requestMatchers("/coach/**").authenticated()
                                         .requestMatchers("/**").permitAll()
+
                 )
                 .sessionManagement(
                         session ->
@@ -70,8 +74,9 @@ public class SecurityConfig {
                 .formLogin(
                         login ->
                                 login
+                                        .loginPage("/cabinet.html")
                                         .permitAll()
-                                        //.successForwardUrl("/home/")
+                                        .successForwardUrl("/home")
                 )
                 .logout(logout -> logout.logoutSuccessUrl("/"))
                 .build();

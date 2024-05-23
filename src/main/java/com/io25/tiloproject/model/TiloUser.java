@@ -1,10 +1,7 @@
 package com.io25.tiloproject.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.Hibernate;
 
 import java.util.List;
@@ -13,22 +10,29 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @Entity
 @Table(name = "users")
+@NoArgsConstructor
+@AllArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
 public class TiloUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String fullName;
+    @Column(unique = true)
+    private String phone;
     @Column(unique = true)
     private String username;
 
     private String password;
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private List<Role> roles;
+    private Role role;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<ScheduleItem> scheduleItems;
 
     @Override
     public boolean equals(Object o) {
@@ -43,3 +47,6 @@ public class TiloUser {
         return getClass().hashCode();
     }
 }
+
+
+
