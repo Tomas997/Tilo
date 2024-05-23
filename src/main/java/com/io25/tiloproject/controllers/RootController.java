@@ -20,7 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RootController {
 
-    private static final String SERVICES_VIEW_NAME = "services";
     private static final String SERVICES_ATTRIBUTE_NAME = "services";
     private static final String PRICES_VIEW_NAME = "prices";
 
