@@ -54,7 +54,7 @@ public class CoachController {
 
     @PreAuthorize("hasRole('ROLE_COACH')")
     @GetMapping("")
-    public String redirectCoachHome(Authentication authentication) {
+    public String redirectCoachHome() {
         return "redirect:coach/coach_main";
     }
 

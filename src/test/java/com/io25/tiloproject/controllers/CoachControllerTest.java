@@ -82,7 +82,7 @@ class CoachControllerTest {
 
     @Test
     void testRedirectCoachHome() {
-        String view = coachController.redirectCoachHome(authentication);
+        String view = coachController.redirectCoachHome();
         assertThat(view).isEqualTo("redirect:coach/coach_main");
     }
 
