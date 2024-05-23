@@ -1,14 +1,28 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Фільтр таблиці</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фільтр таблиці</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
+        body {
+            font-family: 'Lato', sans-serif;
+        }
+
+        .navbar {
+            background-color: #DDE1E4;
+        }
+
+        .navbar-nav .nav-link:hover {
+            font-weight: bold;
+        }
+
         table {
             border-collapse: collapse;
             width: 100%;
-            border: 2px solid #D2B48C; /* Додано границю кольору #D2B48C */
+            border: 2px solid #D2B48C;
         }
 
         th, td {
@@ -19,20 +33,17 @@
 
         th {
             background-color: #f2f2f2;
-            font-family: 'Lato', sans-serif;
             font-size: 18px;
             font-weight: bold;
         }
 
         td {
-            font-family: 'Leelawadee UI', sans-serif;
             font-size: 14px;
         }
 
         h2 {
-            font-family: 'Lato', sans-serif;
-            font-size: 24px; /* Збільшено розмір заголовків */
-            font-weight: bold; /* Збільшено жирність заголовків */
+            font-size: 24px;
+            font-weight: bold;
             margin-top: 20px;
         }
 
@@ -42,7 +53,7 @@
             color: #333;
             padding: 6px 10px;
             cursor: pointer;
-            border-radius: 5px; /* Заокруглені краї кнопки */
+            border-radius: 5px;
         }
 
         input[type="button"]:hover {
@@ -59,46 +70,14 @@
             display: inline-block;
             font-size: 16px;
             cursor: pointer;
-            border-radius: 5px; /* Заокруглені краї кнопки */
-            float: right; /* Вирівнювання кнопки праворуч */
+            border-radius: 5px;
+            float: right;
         }
 
         .back-btn:hover {
             background-color: #CDA774;
         }
 
-        #popup a {
-            color: #333; /* Колір тексту */
-            font-size: 16px; /* Розмір шрифту */
-            text-decoration: none; /* Відсутність підкреслення */
-        }
-
-        #popup a:hover {
-            color: #D2B48C; /* Колір тексту при наведенні */
-            text-decoration: underline; /* Підкреслення при наведенні */
-        }
-
-        #popup table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        #popup th, #popup td {
-            padding: 8px;
-            text-align: left;
-        }
-
-        #popup th {
-            padding-right: 10px;
-        }
-
-        .navbar {
-            background-color: #DDE1E4; /* Колір фону для меню */
-        }
-
-        .navbar-nav .nav-link:hover {
-            font-weight: bold; /* Зробити текст жирним при наведенні */
-        }
         .pagination {
             display: flex;
             list-style: none;
@@ -136,13 +115,12 @@
             border-color: #ddd;
             pointer-events: none;
         }
-
     </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
-        <a class="navbar-brand" href="/#homeindex.html">tilo</a>
+        <a class="navbar-brand" href="/index.html">tilo</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -180,8 +158,7 @@
     </div>
 </nav>
 <button class="back-btn" onclick="window.location.href='/user/orders'">Назад</button>
-<h2 style="font-family: 'Lato', sans-serif; font-size: 21px; font-weight: bold;">Всі замовлення</h2>
-
+<h2>Всі замовлення</h2>
 <label for="filter">Показати:</label>
 <select id="filter">
     <option value="0">Всі</option>
@@ -189,56 +166,54 @@
     <option value="2">Скасовано</option>
     <option value="3">Відбулось</option>
 </select>
-
-
-
-    <table>
-        <thead>
-        <tr>
-            <th>Рядок</th>
-            <th>Дата відвідування</th>
-            <th>Час відвідування</th>
-            <th>Назва</th>
-            <th>Тренер</th>
-            <th>Статус</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="record, iterStat : ${page.toList()}">
-            <td th:text="${iterStat.count}"></td>
-            <td th:text="${record.getDate()}"></td>
-            <td th:text="${record.getTime()}"></td>
-            <td th:text="${services.get(record.getService()).getFirst().getName()}"></td>
-            <td th:text="${record.getCoachName()}"></td>
-            <td th:text="${T(java.time.LocalDateTime).of(record.getDate(), record.getTime()).isBefore(T(java.time.LocalDateTime).now()) ? 'Тренування проведено' : 'Тренування заплановано'}"></td>
-        </tr>
-        </tbody>
-    </table>
-
-
+<table>
+    <thead>
+    <tr>
+        <th>Рядок</th>
+        <th>Дата відвідування</th>
+        <th>Час відвідування</th>
+        <th>Назва</th>
+        <th>Тренер</th>
+        <th>Статус</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="record, iterStat : ${page.toList()}">
+        <td th:text="${iterStat.count}"></td>
+        <td th:text="${record.getDate()}"></td>
+        <td th:text="${record.getTime()}"></td>
+        <td th:text="${services.get(record.getService()).getFirst().getName()}"></td>
+        <td th:text="${record.getCoachName()}"></td>
+        <td th:text="${T(java.time.LocalDateTime).of(record.getDate(), record.getTime()).isBefore(T(java.time.LocalDateTime).now()) ? 'Тренування проведено' : 'Тренування заплановано'}"></td>
+    </tr>
+    </tbody>
+</table>
 <br>
 
+<div th:if="${page.totalPages eq 0}">
+    <span th:text="'Сторінка 0 з 0 '"></span>
+</div>
 
-
-
-<div>
+<div th:if="${page.totalPages gt 0}">
     <span th:text="'Сторінка ' + ${page.number + 1} + ' з ' + ${page.totalPages}"></span>
-</div>
 
-<div>
-    <ul class="pagination">
-        <li th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
-            <a th:href="@{/user/User_Order.html(page=${page.number - 1})}">Попередня</a>
-        </li>
-        <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
-            th:classappend="${i == page.number} ? 'active'">
-            <a th:href="@{/user/User_Order.html(page=${i})}"
-               th:text="${i + 1}"></a>
-        </li>
-        <li th:classappend="${page.hasNext()} ? '' : 'disabled'">
-            <a th:href="@{/user/User_Order.html(page=${page.number + 1})}">Наступна</a>
-        </li>
-    </ul>
+    <div>
+        <ul class="pagination">
+            <li th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
+                <a th:href="@{/user/User_Order.html(page=${page.number - 1})}">Попередня</a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+                th:classappend="${i == page.number} ? 'active'">
+                <a th:href="@{/user/User_Order.html(page=${i})}" th:text="${i + 1}"></a>
+            </li>
+            <li th:classappend="${page.hasNext()} ? '' : 'disabled'">
+                <a th:href="@{/user/User_Order.html(page=${page.number + 1})}">Наступна</a>
+            </li>
+        </ul>
+    </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 </body>
 </html>

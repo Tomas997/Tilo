@@ -33,7 +33,7 @@ public class ScheduleController {
             ScheduleWeekRecord scheduleWeekRecord = scheduleWeekRecordService.saveNewScheduleWeekRecord(scheduleWeekRecordDTO);
             scheduleWeekItemService.saveScheduleItems(scheduleWeekRecordDTO.getItems(),scheduleWeekRecord);
         } catch (Exception ignored) {
-            System.out.println(ignored);
+
         }
         return "/admin/createSchedule?day="+scheduleWeekRecordDTO.getDay()+"&coach="+scheduleWeekRecordDTO.getCoach();
     }

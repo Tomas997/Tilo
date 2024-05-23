@@ -2,17 +2,18 @@ package com.io25.tiloproject.controllers;
 
 import com.io25.tiloproject.config.TiloUserDetails;
 import com.io25.tiloproject.dto.ScheduleItemDTO;
-import com.io25.tiloproject.model.*;
+import com.io25.tiloproject.model.Role;
+import com.io25.tiloproject.model.ScheduleRecord;
+import com.io25.tiloproject.model.TiloUser;
+import com.io25.tiloproject.model.YogaService;
 import com.io25.tiloproject.repository.ScheduleItemRepository;
 import com.io25.tiloproject.repository.TiloUserRepository;
 import com.io25.tiloproject.services.*;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +28,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -34,7 +36,7 @@ import java.util.stream.Collectors;
 @Controller
 @AllArgsConstructor
 public class UserController {
-    private static final int PAGE_SIZE = 1;
+    private static final int PAGE_SIZE = 10;
     PasswordEncoder passwordEncoder;
     TiloUserRepository userRepository;
     ScheduleItemRepository scheduleItemRepository;
@@ -53,8 +55,9 @@ public class UserController {
         TiloUser user = userRepository.findTiloUserById(id).orElse(null);
         model.addAttribute("currentUser", user);
 
-        List<ScheduleRecord> scheduleRecords = scheduleRecordService.findAllRecordsByDate(trainingDate);
-        model.addAttribute("scheduleRecords", scheduleRecords);
+        Optional<List<ScheduleRecord>> scheduleRecords = scheduleRecordService.findAllRecordsByDate(trainingDate);
+        scheduleRecords.ifPresent(records -> model.addAttribute("scheduleRecords", records));
+
         List<YogaService> services = yogaServiceService.getAllServices();
         Map<Long, List<YogaService>> allServices = services.stream().collect(Collectors.groupingBy(YogaService::getId));
         model.addAttribute("services", allServices);
@@ -65,8 +68,9 @@ public class UserController {
 //    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("User_Order.html")
-    public String order(Authentication authentication, Model model,
-                        @RequestParam(defaultValue = "0") Integer page) {
+    public String showOrder(Authentication authentication, Model model,
+                            @RequestParam(defaultValue = "0" ) Integer page) {
+
 
         Long userId = ((TiloUserDetails) authentication.getPrincipal()).getUserId();
 
@@ -86,12 +90,6 @@ public class UserController {
     public String addUser(@RequestParam String name, @RequestParam String phone, @RequestParam String username,
                           @RequestParam String password) {
         TiloUser tiloUser = new TiloUser(null,name,phone,username,passwordEncoder.encode(password),Role.ROLE_USER,new ArrayList<>());
-//                .fullName(name)
-//                .phone(phone)
-//                .username(username)
-//                .password(passwordEncoder.encode(password))
-//                .role(Role.ROLE_USER)
-//                .build();
         userRepository.save(tiloUser);
         return "redirect:/cabinet.html";
     }

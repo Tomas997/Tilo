@@ -14,7 +14,7 @@ public interface ScheduleRecordRepository extends JpaRepository<ScheduleRecord, 
 
     Optional<ScheduleRecord> findFirstByOrderByDateDesc();
 
-    List<ScheduleRecord> findAllByDate(LocalDate date);
+    Optional<List<ScheduleRecord>> findAllByDate(LocalDate date);
 
     Optional<ScheduleRecord> findByCoachAndDate(Coach coach, LocalDate date);
 

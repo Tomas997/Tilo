@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -87,14 +88,17 @@ public class AdminController {
     @GetMapping("/adminMain")
     public String adminMain(Model model,
                             @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}") LocalDate trainingDate) {
-        List<ScheduleRecord> scheduleRecords = scheduleRecordService.findAllRecordsByDate(trainingDate);
-        model.addAttribute("scheduleRecords", scheduleRecords);
+        Optional<List<ScheduleRecord>> scheduleRecords = scheduleRecordService.findAllRecordsByDate(trainingDate);
+        scheduleRecords.ifPresent(records -> model.addAttribute("scheduleRecords", records));
+
         List<YogaService> services = yogaServiceService.getAllServices();
-        Map<Long, List<YogaService>> allServices = services.stream().collect(Collectors.groupingBy(YogaService::getId));
+        Map<Long, List<YogaService>> allServices = services.stream()
+                .collect(Collectors.groupingBy(YogaService::getId));
         model.addAttribute("services", allServices);
         model.addAttribute("currentDay", trainingDate);
         return "/admin/Admin_Main";
     }
+
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/service/del/{id}")

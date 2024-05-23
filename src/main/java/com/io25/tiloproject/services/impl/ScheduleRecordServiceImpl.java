@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -24,10 +25,6 @@ public class ScheduleRecordServiceImpl implements ScheduleRecordService {
     private ScheduleWeekItemRepository scheduleWeekItemRepository;
     private ScheduleItemRepository scheduleItemRepository;
 
-    @Override
-    public List<ScheduleRecord> getAllScheduleRecords() {
-        return scheduleRecordRepository.findAll();
-    }
 
     @Override
     public void deleteById(Long id) {
@@ -62,7 +59,7 @@ public class ScheduleRecordServiceImpl implements ScheduleRecordService {
 
 
     @Override
-    public List<ScheduleRecord> findAllRecordsByDate(LocalDate date) {
+    public Optional<List<ScheduleRecord>> findAllRecordsByDate(LocalDate date) {
         return scheduleRecordRepository.findAllByDate(date);
     }
 

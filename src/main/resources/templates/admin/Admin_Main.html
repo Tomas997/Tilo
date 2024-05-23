@@ -163,33 +163,40 @@
 
 <br>
 
-<div th:each="record, iterStat : ${scheduleRecords}">
-    <img th:src="@{'/src/img/'+${record.getCoach().imgName}}" style="width:100px"/>
-    <h3 th:text="${record.getCoach().getFullName()}">ПІБ тренера</h3>
-    <table>
-        <thead>
-        <tr>
-            <th>Рядок</th>
-            <th>Час початку заняття</th>
-            <th>Назва</th>
-            <th>Зареєстровано</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:type="${item.getService()}" th:each="item, schedStat : ${record.getSchedule()}">
-            <td th:text="${schedStat.count}"></td>
-            <td th:text="${item.getTime()}">09:00</td>
-            <td th:text="${services.get(item.getService()).getFirst().getName()}"></td>
-            <td th:text="${item.getQuantity()}"></td>
-            <!--            <td><input type="button" value="Скасувати" th:onclick="'showPopup('+${schedStat}+', \'ПІБ2\')'"/></td>-->
-            <!--            <td><input type="button" value="Скасувати" th:onclick="'showPopup(\''  + ${item.getId()} +  '\', \'ПІБ2\');'"/></td>-->
-            <td><input type="button" value="Скасувати" th:onclick="'showPopup(\''  + ${item.getId()} +'\');'"/></td>
-        </tr>
-        </tbody>
-    </table>
-    <br>
-</div>
+<th:block th:if="${scheduleRecords!=null && scheduleRecords.size()!=0}">
+    <div th:each="record, iterStat : ${scheduleRecords}">
+        <th:block th:if="${record!=null && record.getCoach()!=null}">
+            <img th:src="@{'/src/img/'+${record.getCoach().imgName}}" style="width:100px"/>
+            <h3 th:text="${record.getCoach().getFullName()}">ПІБ тренера</h3>
+            <table>
+                <thead>
+                <tr>
+                    <th>Рядок</th>
+                    <th>Час початку заняття</th>
+                    <th>Назва</th>
+                    <th>Зареєстровано</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr th:type="${item.getService()}" th:each="item, schedStat : ${record.getSchedule()}">
+                    <td th:text="${schedStat.count}"></td>
+                    <td th:text="${item.getTime()}">09:00</td>
+                    <td th:text="${services.get(item.getService()).getFirst().getName()}"></td>
+                    <td th:text="${item.getQuantity()}"></td>
+                    <!--            <td><input type="button" value="Скасувати" th:onclick="'showPopup('+${schedStat}+', \'ПІБ2\')'"/></td>-->
+                    <!--            <td><input type="button" value="Скасувати" th:onclick="'showPopup(\''  + ${item.getId()} +  '\', \'ПІБ2\');'"/></td>-->
+                    <td><input type="button" value="Скасувати" th:onclick="'showPopup(\''  + ${item.getId()} +'\');'"/>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </th:block>
+        <br>
+    </div>
+</th:block>
 
 <br>
 <br>

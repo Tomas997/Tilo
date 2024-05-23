@@ -24,7 +24,7 @@ public class UserRestController {
     private final TiloUserRepository userRepository;
     private final ScheduleItemRepository scheduleItemRepository;
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/get/{id}")
     public List<TiloUserRestDTO> getSubscribed(@PathVariable Long id) {
         ScheduleItem scheduleItem = scheduleItemRepository.findById(id)

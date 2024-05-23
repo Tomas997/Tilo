@@ -2,23 +2,26 @@ package com.io25.tiloproject.controllers;
 
 import com.io25.tiloproject.config.TiloUserDetails;
 import com.io25.tiloproject.model.Coach;
+import com.io25.tiloproject.model.ScheduleRecord;
+import com.io25.tiloproject.model.YogaService;
 import com.io25.tiloproject.repository.CoachRepository;
 import com.io25.tiloproject.services.CoachService;
+import com.io25.tiloproject.services.YogaServiceService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequestMapping("/coach")
 @Controller
@@ -26,18 +29,33 @@ import java.util.Optional;
 public class CoachController {
     private CoachRepository repository;
     private CoachService coachService;
+    private YogaServiceService yogaServiceService;
 
     @PreAuthorize("hasRole('ROLE_COACH')")
-    @GetMapping("/{id}")
-    public String getCoach(@PathVariable Long id, Model model) {
-        loadServices(model, id);
+    @GetMapping("/coach_main")
+    public String getCoach(Model model, @RequestParam(value = "trainingDate", defaultValue = "#{T(java.time.LocalDate).now()}") LocalDate trainingDate, Authentication authentication) {
+        Long id = ((TiloUserDetails) authentication.getPrincipal()).getUserId();
+        Optional<ScheduleRecord> scheduleRecord = coachService.findScheduleRecordByDateAndId(trainingDate, id);
+
+        model.addAttribute("currentDay", trainingDate);
+
+        Map<Long, List<YogaService>> allServices = yogaServiceService.getAllServices().stream()
+                .collect(Collectors.groupingBy(YogaService::getId));
+
+        model.addAttribute("services", allServices);
+
+        if (scheduleRecord.isPresent() && !scheduleRecord.get().getSchedule().isEmpty()) {
+            model.addAttribute("scheduleRecord", scheduleRecord.get());
+        }
+
         return "coach/Coach_Main";
     }
+
 
     @PreAuthorize("hasRole('ROLE_COACH')")
     @GetMapping("")
     public String redirectCoachHome(Authentication authentication) {
-        return "redirect:coach/" + ((TiloUserDetails) authentication.getPrincipal()).getUserId();
+        return "redirect:coach/coach_main";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -56,14 +74,8 @@ public class CoachController {
     public String getInstructors(Model model) {
         List<Coach> allCoaches = repository.findAll();
         model.addAttribute("coaches", allCoaches);
-        return "coach/instructors.html";
+        return "coach/instructors";
     }
 
-    private void loadServices(Model model, Long id) {
-        Optional<Coach> coach = repository.findById(id);
-        coach.ifPresent(coach1 -> {
-            model.addAttribute("coachScheduleRecords", coach1.getScheduleRecords());
-        });
 
-    }
 }

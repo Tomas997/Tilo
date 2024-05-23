@@ -11,5 +11,7 @@ import java.util.Optional;
 public interface CoachRepository extends JpaRepository<Coach, Long> {
     @Query("SELECT c FROM Coach c ORDER BY c.id DESC LIMIT 1")
     Optional<Coach> findFirst(); // або findFirstByOrderByCreatedAt()
+
+
 }
 
