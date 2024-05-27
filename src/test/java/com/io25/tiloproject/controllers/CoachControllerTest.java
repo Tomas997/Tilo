@@ -1,8 +1,5 @@
 package com.io25.tiloproject.controllers;
 
-import static org.mockito.Mockito.*;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.io25.tiloproject.config.TiloUserDetails;
 import com.io25.tiloproject.model.Coach;
 import com.io25.tiloproject.model.ScheduleItem;
@@ -24,8 +21,14 @@ import org.springframework.ui.Model;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 class CoachControllerTest {
 
@@ -96,6 +99,16 @@ class CoachControllerTest {
 
         verify(coachService).deleteById(Long.parseLong(id));
         assertThat(view).isEqualTo("redirect:" + url.getPath());
+    }
+
+    @Test
+    void testDeleteByIdWrongReferrer() throws MalformedURLException {
+        String id = "1";
+        when(request.getHeader("referer")).thenReturn("ww:previousPage");
+
+        String view = coachController.deleteById(id, request);
+
+        assertThat(view).isEqualTo("redirect:/");
     }
 
     @Test

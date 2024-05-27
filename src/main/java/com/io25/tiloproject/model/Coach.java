@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Coach extends TiloUser {
+
     @Column(length = 450)
     private String info;
 
