@@ -35,6 +35,7 @@ public class ScheduleController {
         } catch (Exception ignored) {
 
         }
+
         return "/admin/createSchedule?day="+scheduleWeekRecordDTO.getDay()+"&coach="+scheduleWeekRecordDTO.getCoach();
     }
 
